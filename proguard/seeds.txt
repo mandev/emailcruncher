@@ -1,0 +1,2 @@
+com.adlitteram.emailcruncher.Main
+com.adlitteram.emailcruncher.Main: void main(java.lang.String[])
