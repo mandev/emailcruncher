@@ -1,32 +1,15 @@
-/*
- * ExtUrl.java
- *
- * Created on 7 mai 2007, 12:19
- *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
- */
 package com.adlitteram.emailcruncher;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
-/**
- *
- * @author manu
- */
 public class ExtURL {
-    //~--- fields --------------------------------------------------------------
 
-    private URL url;
-    private URL initUrl;
-    private int inLinkCount;
-    private int outLinkCount;
+    private final URL url;
+    private final URL initUrl;
+    private final int inLinkCount;
+    private final int outLinkCount;
 
-    //~--- constructors --------------------------------------------------------
-    /**
-     * Creates a new instance of ExtUrl
-     */
     public ExtURL(URL url) {
         this(url, url, 0, 0);
     }
@@ -38,7 +21,6 @@ public class ExtURL {
         this.outLinkCount = oc;
     }
 
-    //~--- methods -------------------------------------------------------------
     public URL getUrl() {
         return url;
     }
@@ -52,9 +34,8 @@ public class ExtURL {
     }
 
     public ExtURL concatURL(String l) {
-        String link = new String(l); // Don't keep the big original String
         try {
-            URL linkUrl = new URL(link);
+            URL linkUrl = new URL(l);
             if ("http".equalsIgnoreCase(linkUrl.getProtocol())) {
                 if (initUrl.getHost().equalsIgnoreCase(linkUrl.getHost())) {
                     return new ExtURL(linkUrl, initUrl, inLinkCount + 1, outLinkCount);
@@ -64,11 +45,11 @@ public class ExtURL {
                 }
             }
         }
-        catch (MalformedURLException e) {
+        catch (MalformedURLException ignored) {
         }
 
         try {
-            URL linkUrl = new URL(url, link);
+            URL linkUrl = new URL(url, l);
             if (initUrl.getHost().equalsIgnoreCase(linkUrl.getHost())) {
                 return new ExtURL(linkUrl, initUrl, inLinkCount + 1, outLinkCount);
             }
@@ -106,7 +87,6 @@ public class ExtURL {
 
     @Override
     public int hashCode() {
-        int h = url.toString().hashCode();
-        return h;
+        return url.toString().hashCode();
     }
 }

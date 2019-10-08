@@ -1,28 +1,15 @@
-/*
- * AboutDialog.java
- *
- * Created on 30 juin 2007, 14:41
- */
 package com.adlitteram.emailcruncher.gui;
 
 import com.adlitteram.emailcruncher.utils.Utils;
 
-/**
- *
- * @author manu
- */
 public class AboutDialog extends javax.swing.JDialog {
 
-    /**
-     * Creates new form AboutDialog
-     */
     public AboutDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
 
         setLocationRelativeTo(parent);
         setVisible(true);
-
     }
 
     /**
@@ -49,11 +36,7 @@ public class AboutDialog extends javax.swing.JDialog {
       jLabel2.setText(bundle.getString("AboutDialog.jLabel2.text")); // NOI18N
 
       jXHyperlink1.setText(bundle.getString("AboutDialog.jXHyperlink1.text")); // NOI18N
-      jXHyperlink1.addActionListener(new java.awt.event.ActionListener() {
-         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            execBrowser(evt);
-         }
-      });
+      jXHyperlink1.addActionListener(evt -> execBrowser(evt));
 
       jLabel3.setText(bundle.getString("AboutDialog.jLabel3.text")); // NOI18N
 

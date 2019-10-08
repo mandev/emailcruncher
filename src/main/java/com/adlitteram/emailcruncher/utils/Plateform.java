@@ -11,19 +11,19 @@ public class Plateform {
     public static final boolean LINUX = (OS_NAME.toLowerCase().contains("linux"));
     public static final boolean SUNOS = (OS_NAME.toLowerCase().contains("sunos"));
 
-    public static final boolean isWindows() {
+    public static boolean isWindows() {
         return WINDOWS;
     }
 
-    public static final boolean isLinux() {
+    public static boolean isLinux() {
         return LINUX;
     }
 
-    public static final boolean isSunOS() {
+    public static boolean isSunOS() {
         return SUNOS;
     }
 
-    public static final boolean isMacOSX() {
+    public static boolean isMacOSX() {
         return MAC_OSX;
     }
 }

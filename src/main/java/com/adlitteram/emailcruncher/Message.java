@@ -1,9 +1,3 @@
-/*
- * Message.java
- *
- * Created on 31 juillet 2006, 22:17
- *
- */
 package com.adlitteram.emailcruncher;
 
 import java.text.MessageFormat;
@@ -12,10 +6,10 @@ import java.util.ResourceBundle;
 
 public class Message {
 
-    private static String baseName = "com.adlitteram.emailcruncher.resources.bundle";
-    private static ResourceBundle resource = ResourceBundle.getBundle(baseName);
+    private static final String baseName = "com.adlitteram.emailcruncher.resources.bundle";
+    private static final ResourceBundle resource = ResourceBundle.getBundle(baseName);
 
-    public static final String get(String key) {
+    public static String get(String key) {
         try {
             return resource.getString(key);
         }
@@ -24,15 +18,15 @@ public class Message {
         }
     }
 
-    public static final String get(String key, Object arg1) {
+    public static String get(String key, Object arg1) {
         return get(key, new Object[]{arg1});
     }
 
-    public static final String get(String key, Object arg1, Object arg2) {
+    public static String get(String key, Object arg1, Object arg2) {
         return get(key, new Object[]{arg1, arg2});
     }
 
-    public static final String get(String key, Object[] args) {
+    public static String get(String key, Object[] args) {
         if (args == null) {
             return get(key);
         }

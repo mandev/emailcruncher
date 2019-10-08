@@ -1,7 +1,3 @@
-/*
- * ActionManager.java
- *
- */
 package com.adlitteram.emailcruncher;
 
 import com.adlitteram.emailcruncher.actions.*;
@@ -12,15 +8,13 @@ import javax.swing.InputMap;
 import javax.swing.KeyStroke;
 
 public class ActionController {
-    //~--- fields --------------------------------------------------------------
 
-    private Cruncher cruncher;
+    private final Cruncher cruncher;
 
     // Action/key Maps
-    private InputMap inputMap = new InputMap();
-    private ActionMap actionMap = new ActionMap();
+    private final InputMap inputMap = new InputMap();
+    private final ActionMap actionMap = new ActionMap();
 
-    //~--- constructors --------------------------------------------------------
     public ActionController(Cruncher cruncher) {
         this.cruncher = cruncher;
 

@@ -4,7 +4,6 @@ import com.adlitteram.emailcruncher.Cruncher;
 import com.adlitteram.emailcruncher.log.Log;
 
 import java.awt.event.ActionEvent;
-import javax.swing.DefaultListModel;
 
 public class ClearEmails extends XAction {
 
@@ -17,8 +16,7 @@ public class ClearEmails extends XAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        DefaultListModel model = cruncher.getEmailListModel();
-        model.clear();
+        cruncher.getEmailListModel().clear();
         cruncher.setEmailCount(0);
         Log.resetHandlers();
     }

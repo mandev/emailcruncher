@@ -5,7 +5,6 @@ import com.adlitteram.emailcruncher.log.Log;
 
 import java.awt.event.ActionEvent;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import javax.swing.DefaultListModel;
 
@@ -25,8 +24,8 @@ public class RemoveDupEmails extends XAction {
 
         model.clear();
 
-        for (Iterator i = set.iterator(); i.hasNext();) {
-            model.addElement(i.next());
+        for (Object o : set) {
+            model.addElement(o);
         }
 
         Log.getLogger().info("Unique emails: " + model.getSize());

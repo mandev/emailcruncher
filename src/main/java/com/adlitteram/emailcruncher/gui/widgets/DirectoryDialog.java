@@ -21,15 +21,15 @@ import javax.swing.WindowConstants;
 
 public class DirectoryDialog extends JDialog {
 
-    public static final int APPROVE_OPTION = JFileChooser.APPROVE_OPTION;
-    public static final int CANCEL_OPTION = JFileChooser.CANCEL_OPTION;
+    private static final int APPROVE_OPTION = JFileChooser.APPROVE_OPTION;
+    private static final int CANCEL_OPTION = JFileChooser.CANCEL_OPTION;
 
     private int status;
     private final String dirname;
     private DirectoryChooser dc;
     private JButton okButton;
 
-    ActionListener approveListener = new ActionListener() {
+    private final ActionListener approveListener = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
             dispose();
             if (dc.getSelectedDirectory() != null) {

@@ -53,7 +53,7 @@ public class ScanningThread implements Runnable {
                     String type = urlConnection.getContentType();
                     if (type == null || type.contains("text/")) {
                         urlStream = urlConnection.getInputStream();
-                        byte b[] = new byte[1024];
+                        byte[] b = new byte[1024];
                         StringBuilder buffer = new StringBuilder(1024);
                         int numRead;
 
@@ -71,7 +71,6 @@ public class ScanningThread implements Runnable {
                             String content = buffer.toString().toLowerCase();
                             int u = searchURL(content, url);
                             int e = searchEmail(content);
-                            //XLog.getLogger().info(url + " - emails: " + e + " - url: " + u);
                         }
                     }
                 }
@@ -108,7 +107,7 @@ public class ScanningThread implements Runnable {
             cruncher.syncNotify();
             wait();
         }
-        catch (InterruptedException ex) {
+        catch (InterruptedException ignored) {
         }
     }
 
@@ -253,7 +252,7 @@ public class ScanningThread implements Runnable {
                 }
                 in.close();
             }
-            catch (IOException e) {
+            catch (IOException ignored) {
             }
             finally {
                 Utils.closeQuietly(in);
@@ -270,7 +269,7 @@ public class ScanningThread implements Runnable {
                 return linkUrl;
             }
         }
-        catch (MalformedURLException e) {
+        catch (MalformedURLException ignored) {
         }
 
         try {

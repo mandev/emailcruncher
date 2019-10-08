@@ -24,5 +24,4 @@ public class About extends XAction {
         Window window = (c instanceof Component) ? SwingUtilities.getWindowAncestor((Component) c) : null;
         new AboutDialog((Frame) window, true);
     }
-
-};
+}

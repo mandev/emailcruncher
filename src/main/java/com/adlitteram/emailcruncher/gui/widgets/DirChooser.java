@@ -12,15 +12,13 @@ import javax.swing.JFileChooser;
 
 public class DirChooser {
 
-    static final int LOAD = FileDialog.LOAD;
-    public static final int CANCEL_OPTION = JFileChooser.CANCEL_OPTION;
+    private static final int LOAD = FileDialog.LOAD;
+    private static final int CANCEL_OPTION = JFileChooser.CANCEL_OPTION;
     public static final int APPROVE_OPTION = JFileChooser.APPROVE_OPTION;
 
-    private boolean isNative;
+    private final boolean isNative;
     private FileDialog awtChooser;
     private DirectoryDialog swingChooser;
-    private String title;
-    private String dirname;
     private File selectedDir;
 
     public DirChooser(String dirname) {
@@ -32,8 +30,7 @@ public class DirChooser {
     }
 
     public DirChooser(Component cmp, String dirname, String title) {
-        this.title = title;
-        this.dirname = dirname;
+        String dirname1 = dirname;
         if (dirname == null) {
             dirname = System.getProperty("user.home");
         }

@@ -27,7 +27,7 @@ import javax.swing.tree.TreeSelectionModel;
 
 public class DirectoryChooser extends JTree implements TreeSelectionListener, MouseListener {
 
-    private static FileSystemView fsv = FileSystemView.getFileSystemView();
+    private static final FileSystemView fsv = FileSystemView.getFileSystemView();
 
     public DirectoryChooser() {
         this(null);
@@ -68,7 +68,7 @@ public class DirectoryChooser extends JTree implements TreeSelectionListener, Mo
     }
 
     public ActionListener[] getActionListeners() {
-        return (ActionListener[]) listenerList.getListeners(ActionListener.class);
+        return listenerList.getListeners(ActionListener.class);
     }
 
     @Override
@@ -147,7 +147,7 @@ public class DirectoryChooser extends JTree implements TreeSelectionListener, Mo
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         }
-        catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException ex) {
+        catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException ignored) {
         }
 
         final JDialog dialog = new JDialog((JFrame) null, true);
@@ -167,7 +167,7 @@ public class DirectoryChooser extends JTree implements TreeSelectionListener, Mo
             if ((c == okButton) || (c == dc)) {
                 System.out.println("You selected: " + dc.getSelectedDirectory());
             }
-            dialog.hide();
+            dialog.setVisible(false);
         };
 
         dc.addActionListener(actionListener);
@@ -182,7 +182,7 @@ public class DirectoryChooser extends JTree implements TreeSelectionListener, Mo
 
         dialog.setBounds(200, 200, 300, 350);
         dc.scrollRowToVisible(Math.max(0, dc.getMinSelectionRow() - 4));
-        dialog.show();
+        dialog.setVisible(true);
         System.exit(0);
     }
 

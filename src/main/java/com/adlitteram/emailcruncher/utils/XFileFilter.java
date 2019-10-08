@@ -10,9 +10,9 @@ public class XFileFilter extends javax.swing.filechooser.FileFilter implements j
     public static final XFileFilter XLS = new XFileFilter("xls|text", "Excel files");
     public static final XFileFilter TXT = new XFileFilter("txt|csv|text", "Text files");
 
-    private String[] exts;
-    private String desc;
-    private boolean acceptDir;
+    private final String[] exts;
+    private final String desc;
+    private final boolean acceptDir;
 
     private XFileFilter(String ext, String desc) {
         this(ext, desc, true);
@@ -23,7 +23,7 @@ public class XFileFilter extends javax.swing.filechooser.FileFilter implements j
         exts = new String[st.countTokens()];
 
         for (int i = 0; i < exts.length; i++) {
-            exts[i] = (String) st.nextToken();
+            exts[i] = st.nextToken();
         }
 
         this.desc = desc;
@@ -59,7 +59,7 @@ public class XFileFilter extends javax.swing.filechooser.FileFilter implements j
         return exts;
     }
 
-    public static String getSuffix(String str) {
+    private static String getSuffix(String str) {
         int i = str.lastIndexOf('.');
         if ((i > 0) && (i < (str.length() - 1))) {
             return str.substring(i + 1);

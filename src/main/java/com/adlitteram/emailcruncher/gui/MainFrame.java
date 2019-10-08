@@ -17,18 +17,11 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-/**
- *
- * @author manu
- */
 public class MainFrame extends JFrame implements PropertyChangeListener {
 
     private final Cruncher cruncher;
     private final ActionController controller;
 
-    /**
-     * Creates new form MainFrame
-     */
     public MainFrame(Cruncher cruncher, ActionController controller) {
         this.cruncher = cruncher;
         this.controller = controller;
@@ -58,9 +51,7 @@ public class MainFrame extends JFrame implements PropertyChangeListener {
                 updateGuiStatus(status);
             }
             else {
-                SwingUtilities.invokeLater(() -> {
-                    updateGuiStatus(status);
-                });
+                SwingUtilities.invokeLater(() -> updateGuiStatus(status));
             }
         }
     }
@@ -373,9 +364,9 @@ public class MainFrame extends JFrame implements PropertyChangeListener {
                 .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {goButton, stopButton});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, goButton, stopButton);
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {clearEmailsButton, exportToButton, settingsButton, sortEmailsButton, validateEmailsButton});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, clearEmailsButton, exportToButton, settingsButton, sortEmailsButton, validateEmailsButton);
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -428,7 +419,7 @@ public class MainFrame extends JFrame implements PropertyChangeListener {
            cruncher.setUseRobots(robotsCheck.isSelected());
 
            String url = (String) urlCombo.getSelectedItem();
-           cruncher.start(new URL((String) url));
+           cruncher.start(new URL(url));
 
            DefaultComboBoxModel model = (DefaultComboBoxModel) urlCombo.getModel();
            if (model.getIndexOf(url) == -1) {

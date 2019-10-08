@@ -20,9 +20,6 @@ public class SettingsDialog extends JDialog {
 
     private final Cruncher cruncher;
 
-    /**
-     * Creates new form SettingsDialog
-     */
     public SettingsDialog(Window window, Cruncher cruncher) {
         super((Frame) window);
         this.cruncher = cruncher;
@@ -188,7 +185,7 @@ public class SettingsDialog extends JDialog {
                 .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cancelButton, okButton});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, cancelButton, okButton);
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

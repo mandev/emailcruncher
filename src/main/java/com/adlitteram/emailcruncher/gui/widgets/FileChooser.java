@@ -8,7 +8,6 @@ import java.awt.Component;
 import java.awt.FileDialog;
 import java.awt.Frame;
 import java.io.File;
-import java.io.FilenameFilter;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -21,11 +20,11 @@ public class FileChooser {
     public static final int CANCEL_OPTION = JFileChooser.CANCEL_OPTION;
     public static final int APPROVE_OPTION = JFileChooser.APPROVE_OPTION;
 
-    private boolean isNative;
+    private final boolean isNative;
     private FileDialog awtChooser;
     private JFileChooser swingChooser;
     private Component parent;
-    private String title;
+    private final String title;
     private int mode;
     private File selectedFile;
 
@@ -55,7 +54,6 @@ public class FileChooser {
                         File file = swingChooser.getSelectedFile();
                         if (file.exists()) {
 
-                            // switch ( JOptionPane.showOptionDialog(Main.getMainframe(),
                             switch (JOptionPane.showOptionDialog(swingChooser, Message.get("Overwrite") + " : \n" + file.getPath(), swingChooser.getDialogTitle(),
                                     JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null)) {
                                 case JOptionPane.CLOSED_OPTION:
@@ -163,8 +161,6 @@ public class FileChooser {
     }
 
     public void setAccessory(JComponent accessory) {
-
-        // this.accessory = accessory ;
         if (!isNative) {
             swingChooser.setAccessory(accessory);
         }
@@ -191,15 +187,11 @@ public class FileChooser {
     }
 
     public void addFileFilter(FileFilter filter) {
-        final FileFilter ff = filter;
-
         if (isNative) {
-            FilenameFilter namefilter = (File dir, String name) -> ff.accept(new File(dir, name));
-            awtChooser.setFilenameFilter(namefilter);
+            awtChooser.setFilenameFilter((File dir, String name) -> filter.accept(new File(dir, name)));
         }
         else {
             swingChooser.addChoosableFileFilter(filter);
         }
-
     }
 }

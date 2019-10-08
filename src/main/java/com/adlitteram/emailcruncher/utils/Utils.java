@@ -15,7 +15,7 @@ public class Utils {
         try {
             Thread.sleep(s);
         }
-        catch (InterruptedException e) {
+        catch (InterruptedException ignored) {
         }
     }
 
@@ -24,7 +24,7 @@ public class Utils {
             try {
                 in.close();
             }
-            catch (IOException ee) {
+            catch (IOException ignored) {
             }
         }
     }
@@ -34,7 +34,7 @@ public class Utils {
             try {
                 in.close();
             }
-            catch (IOException ee) {
+            catch (IOException ignored) {
             }
         }
     }

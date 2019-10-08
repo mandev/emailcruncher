@@ -70,7 +70,7 @@ public class ExportEmails extends XAction {
         return null;
     }
 
-    private void exportToXls(String filename) throws UnsupportedEncodingException, IOException {
+    private void exportToXls(String filename) throws IOException {
         HSSFWorkbook wb = new HSSFWorkbook();
         HSSFSheet sheet = wb.createSheet("emails");
 
@@ -90,7 +90,7 @@ public class ExportEmails extends XAction {
         }
     }
 
-    private void exportToTxt(String filename) throws UnsupportedEncodingException, IOException {
+    private void exportToTxt(String filename) throws IOException {
 
         BufferedWriter writer = null;
 

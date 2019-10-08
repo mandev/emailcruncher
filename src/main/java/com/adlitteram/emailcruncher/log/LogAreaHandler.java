@@ -11,7 +11,7 @@ import javax.swing.text.PlainDocument;
 
 public class LogAreaHandler extends Handler {
 
-    protected SimpleDateFormat fmt = new SimpleDateFormat("HH:mm:ss.SSS");
+    private final SimpleDateFormat fmt = new SimpleDateFormat("HH:mm:ss.SSS");
 
     private final JTextArea logArea;
     private final Document document;
@@ -27,7 +27,7 @@ public class LogAreaHandler extends Handler {
             try {
                 document.remove(0, document.getLength());
             }
-            catch (BadLocationException e) {
+            catch (BadLocationException ignored) {
             }
         });
     }

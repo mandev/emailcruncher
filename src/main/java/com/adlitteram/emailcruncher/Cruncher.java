@@ -1,11 +1,3 @@
-/*
- * Cruncher.java
- *
- * Created on 27 avril 2007, 10:01
- *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
- */
 package com.adlitteram.emailcruncher;
 
 import com.adlitteram.emailcruncher.log.Log;
@@ -30,7 +22,6 @@ import java.util.regex.PatternSyntaxException;
 import javax.swing.DefaultListModel;
 
 public class Cruncher implements Runnable {
-    //~--- static fields -------------------------------------------------------
 
     private static final String URL_FILTER = "url_filter";
     private static final String PAGE_FILTER = "page_filter";
@@ -48,14 +39,14 @@ public class Cruncher implements Runnable {
     public static final int ALL = 1;
     public static final int STOP = 0;
     public static final int RUN = 1;
-    //~--- fields --------------------------------------------------------------
-    private Preferences prefs;
-    private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
-    private DefaultListModel emailListModel = new DefaultListModel();
-    private Map urlToSearch = Collections.synchronizedMap(new HashMap(10000));    // URLs to be searched
-    private Set urlFound = Collections.synchronizedSet(new HashSet(100000));
 
-    private ArrayList threadVector = new ArrayList();
+    private Preferences prefs;
+    private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+    private final DefaultListModel emailListModel = new DefaultListModel();
+    private final Map<String, ExtURL> urlToSearch = Collections.synchronizedMap(new HashMap<>(10000));    // URLs to be searched
+    private final Set<String> urlFound = Collections.synchronizedSet(new HashSet<>(100000));
+
+    private final ArrayList<ScanningThread> threadList = new ArrayList<>();
     private Thread stopThread;
     private int threadCount;
     private int stoppedCount;
@@ -77,16 +68,12 @@ public class Cruncher implements Runnable {
     private int proxyPort = 80;
     private Proxy proxy;
     private int status = STOP;
-    private Object lock = new Object();
 
-    //~--- constructors --------------------------------------------------------
-// private URL startUrl ;
     public Cruncher() {
         init();
     }
 
-    //~--- methods -------------------------------------------------------------
-    public void init() {
+    private void init() {
         prefs = Preferences.userNodeForPackage(Cruncher.class);
 
         setEmailFilter(prefs.get(EMAIL_FILTER, ""));
@@ -125,51 +112,47 @@ public class Cruncher implements Runnable {
     }
 
     public void addUrlToSearch(ExtURL url) {
-        if (urlFound.contains(url.toString()) || urlToSearch.size() > 10000) {
-            return;
+        if ( !urlFound.contains(url.toString()) && urlToSearch.size() < 100000) {
+            urlToSearch.put(url.toString(), url);
         }
-        urlToSearch.put(url.toString(), url);
-
-        //notifyAll();
     }
 
-    public ScanningThread getScanningThread() {
-        for (int i = threadVector.size() - 1; i >= 0; i--) {
-            ScanningThread th = (ScanningThread) threadVector.get(i);
+    private ScanningThread getScanningThread() {
+        for (int i = threadList.size() - 1; i >= 0; i--) {
+            ScanningThread th = threadList.get(i);
             if (th.getStatus() == ScanningThread.FINISH) {
                 return th;
             }
         }
-        if (threadVector.size() >= threadMax) {
+        if (threadList.size() >= threadMax) {
             return null;
         }
 
         ScanningThread th = new ScanningThread(this);
-        threadVector.add(th);
+        threadList.add(th);
         return th;
-
     }
 
     private boolean isThreadAvailable() {
-        for (int i = threadVector.size() - 1; i >= 0; i--) {
-            ScanningThread th = (ScanningThread) threadVector.get(i);
+        for (int i = threadList.size() - 1; i >= 0; i--) {
+            ScanningThread th = threadList.get(i);
             if (th.getStatus() == ScanningThread.FINISH) {
                 return true;
             }
             else if ((System.currentTimeMillis() - th.getTime()) > (timeOut * 1000L)) {
                 stoppedCount++;
-                threadVector.remove(i);
+                threadList.remove(i);
                 Log.info(th.getUrl() + " aborted - status: " + th.getStatus() + " - restarted: " + th.isAlreadyStarted());
                 return true;
             }
         }
-        return (threadVector.size() < threadMax);
+        return (threadList.size() < threadMax);
     }
 
     private int getRunningThread() {
         int r = 0;
-        for (int i = threadVector.size() - 1; i >= 0; i--) {
-            ScanningThread th = (ScanningThread) threadVector.get(i);
+        for (int i = threadList.size() - 1; i >= 0; i--) {
+            ScanningThread th = threadList.get(i);
             if (th.getStatus() != ScanningThread.FINISH) {
                 r++;
             }
@@ -177,7 +160,7 @@ public class Cruncher implements Runnable {
         return r;
     }
 
-    public synchronized ExtURL getUrlToSearch() {
+    private synchronized ExtURL getUrlToSearch() {
 
         while (!isThreadAvailable() || urlToSearch.isEmpty()) {
             try {
@@ -195,13 +178,12 @@ public class Cruncher implements Runnable {
             }
         }
 
-//        return (ExtURL) urlToSearch.remove(urlToSearch.size() - 1);
-        Collection col = urlToSearch.values();
+        Collection<ExtURL> col = urlToSearch.values();
         synchronized (urlToSearch) {
-            Iterator it = col.iterator();
-            Object u = it.next();
+            Iterator<ExtURL> it = col.iterator();
+            ExtURL u = it.next();
             it.remove();
-            return (ExtURL) u;
+            return u;
         }
     }
 
@@ -212,8 +194,7 @@ public class Cruncher implements Runnable {
     public void run() {
 
         while (status == RUN) {
-            Log.info("UrlSize : " + urlFound.size() + " - urlToSearch.size: " + urlToSearch.size() + " - Running Thread: " + getRunningThread() + " - Total Request: " + threadCount + " - Aborted request: " + stoppedCount);
-            //System.err.println("UrlSize : " + set.size() +  " - urlToSearch.size: " + urlToSearch.size() + " - Running Thread: " + getRunningThread() + " - Total Request: " + threadCount + " - Aborted request: " + stoppedCount);
+            Log.info("urlFoundSize : " + urlFound.size() + " - urlToSearchSize: " + urlToSearch.size() + " - Running Thread: " + getRunningThread() + " - Total Request: " + threadCount + " - Aborted request: " + stoppedCount);
             ExtURL url = getUrlToSearch();
             if (url == null) {
                 Log.info("url = null");
@@ -229,6 +210,7 @@ public class Cruncher implements Runnable {
                 th.setUrl(url);
                 th.setStatus(ScanningThread.START);
                 th.restart();
+                Log.info("Scanned  url : " + url ) ;
             }
             else {
                 addUrlToSearch(url);
@@ -262,7 +244,7 @@ public class Cruncher implements Runnable {
 
         urlFound.clear();
         urlToSearch.clear();
-        threadVector.clear();
+        threadList.clear();
 
         startTime = System.currentTimeMillis();
         threadCount = 0;
@@ -344,12 +326,6 @@ public class Cruncher implements Runnable {
         return threadCount;
     }
 
-// public void decThreadCount() {
-//    threadCount-- ;
-// }
-//    public void incStoppedThreadCount() {
-//        stoppedCount++;
-//    }
     public int getStoppedThreadCount() {
         return stoppedCount;
     }
