@@ -43,8 +43,7 @@ public class GuiUtils {
         try {
             System.setProperty("swing.boldMetal", "false");
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        }
-        catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException ignored) {
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException ignored) {
         }
     }
 
@@ -149,8 +148,7 @@ public class GuiUtils {
                 return null;
             }
             return new ImageIcon(url);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.getLogger().log(Level.WARNING, "", e);
             return null;
         }
@@ -165,8 +163,7 @@ public class GuiUtils {
                 return null;
             }
             return Toolkit.getDefaultToolkit().getImage(url);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.getLogger().log(Level.WARNING, "", e);
             return null;
         }
@@ -189,8 +186,7 @@ public class GuiUtils {
         if (cmpt != null) {
             if (on) {
                 cmpt.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            }
-            else {
+            } else {
                 cmpt.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             }
         }

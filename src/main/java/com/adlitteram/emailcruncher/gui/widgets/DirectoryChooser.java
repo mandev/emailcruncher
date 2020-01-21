@@ -146,8 +146,7 @@ public class DirectoryChooser extends JTree implements TreeSelectionListener, Mo
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        }
-        catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException ignored) {
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException ignored) {
         }
 
         final JDialog dialog = new JDialog((JFrame) null, true);

@@ -7,34 +7,29 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Validate syntax of email addresses. Does not probe to see if mailserver
- * exists in DNS or online. See MailProber for that. See ValidateEmailFile for
- * an example of how to use this class.
+ * Validate syntax of email addresses. Does not probe to see if mailserver exists in DNS or online. See MailProber for
+ * that. See ValidateEmailFile for an example of how to use this class.
  *
  * @author Roedy Green, Canadian Mind Products
- * @version 1.0 to do: check validity of & in first part of email address.
- * Appears in practice.
+ * @version 1.0 to do: check validity of & in first part of email address. Appears in practice.
  */
 public class EmailSyntaxValidator {
 
     private static boolean debugging = false;
 
     /**
-     * Check how likely an email address is to be valid. The higher the number
-     * returned, the more likely the address is valid. This method does not
-     * probe the internet in any way to see if the corresponding mail server or
-     * domain exists.
+     * Check how likely an email address is to be valid. The higher the number returned, the more likely the address is
+     * valid. This method does not probe the internet in any way to see if the corresponding mail server or domain
+     * exists.
      *
-     * @param email bare computer email address. e.g. r...@mindprod.com No
-     * "Roedy Green" <r...@mindprod.com> style addresses. No local addresses,
-     * eg. roedy.
+     * @param email bare computer email address. e.g. r...@mindprod.com No "Roedy Green" <r...@mindprod.com> style
+     * addresses. No local addresses, eg. roedy.
      *
      * @return 0 = email address is definitely malformed, e.g. missing
      * @. ends in .invalid
      * <br>
-     * 1 = address does not meet one of the valid patterns below. It still might
-     * be ok according to some obscure rule in RFC 822 Java InternetAddress
-     * accepts it as valid.
+     * 1 = address does not meet one of the valid patterns below. It still might be ok according to some obscure rule in
+     * RFC 822 Java InternetAddress accepts it as valid.
      * <br>
      * 2 = unknown top level domain.
      * <br>
@@ -42,18 +37,15 @@ public class EmailSyntaxValidator {
      * <br>
      * 4 = address of form xxx@[209.139.205.2] using IP
      * <br>
-     * 5 = address of form xxx.xxx....@xxx.xxx.xxx Dots _ or - in first part of
-     * name
+     * 5 = address of form xxx.xxx....@xxx.xxx.xxx Dots _ or - in first part of name
      * <br>
      * 6 = addreess of form x...@xxx.xxx.xxx rare, but known, domain
      * <br>
      * 7 = address of form x...@xxx.xxx.ca or any national suffix.
      * <br>
-     * 8 = address of form x...@xxx.xxx.ca this national suffix, e.g. .ca in
-     * Canada .de in Germany
+     * 8 = address of form x...@xxx.xxx.ca this national suffix, e.g. .ca in Canada .de in Germany
      * <br>
-     * 9 = address of form x...@xxx.xxx.com .org .net .edu .gov .biz -- official
-     * domains
+     * 9 = address of form x...@xxx.xxx.com .org .net .edu .gov .biz -- official domains
      */
     public static int howValid(String email) {
         if (email == null) {
@@ -85,18 +77,15 @@ public class EmailSyntaxValidator {
                 if (m9.matches()) {
                     if (officialTLDs.contains(tld)) {
                         return 9;
-                    }
-                    else if (thisCountry.equals(tld)) {
+                    } else if (thisCountry.equals(tld)) {
                         return 8;
-                    }
-                    else if (nationalTLDs.contains(tld)) {
+                    } else if (nationalTLDs.contains(tld)) {
                         return 7;
-                    }
-                    else if (rareTLDs.contains(tld)) {
+                    } else if (rareTLDs.contains(tld)) {
                         return 6;
-                    }
-                    else {
-                        return 3; /* unknown tld */
+                    } else {
+                        return 3;
+                        /* unknown tld */
                     }
                 }
                 // allow dots in name
@@ -104,25 +93,23 @@ public class EmailSyntaxValidator {
                 if (m5.matches()) {
                     if (officialTLDs.contains(tld)) {
                         return 5;
-                    }
-                    else if (thisCountry.equals(tld)) {
+                    } else if (thisCountry.equals(tld)) {
                         return 5;
-                    }
-                    else if (nationalTLDs.contains(tld)) {
+                    } else if (nationalTLDs.contains(tld)) {
                         return 5;
-                    }
-                    else if (rareTLDs.contains(tld)) {
+                    } else if (rareTLDs.contains(tld)) {
                         return 5;
-                    }
-                    else {
-                        return 2; /* unknown tld */
+                    } else {
+                        return 2;
+                        /* unknown tld */
                     }
                 }
 
                 // IP
                 Matcher m4 = p4.matcher(email);
                 if (m4.matches()) {
-                    return 4;  /* can't tell TLD */
+                    return 4;
+                    /* can't tell TLD */
                 }
 
                 // allow even lead/trail dots in name, except at start of domain
@@ -130,18 +117,15 @@ public class EmailSyntaxValidator {
                 if (m3.matches()) {
                     if (officialTLDs.contains(tld)) {
                         return 3;
-                    }
-                    else if (thisCountry.equals(tld)) {
+                    } else if (thisCountry.equals(tld)) {
                         return 3;
-                    }
-                    else if (nationalTLDs.contains(tld)) {
+                    } else if (nationalTLDs.contains(tld)) {
                         return 3;
-                    }
-                    else if (rareTLDs.contains(tld)) {
+                    } else if (rareTLDs.contains(tld)) {
                         return 3;
-                    }
-                    else {
-                        return 2; /* unknown domain */
+                    } else {
+                        return 2;
+                        /* unknown domain */
                     }
                 }
             }  // end if clean

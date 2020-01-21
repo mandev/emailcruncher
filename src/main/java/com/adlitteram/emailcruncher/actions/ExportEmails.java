@@ -12,7 +12,6 @@ import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.prefs.Preferences;
 import javax.swing.DefaultListModel;
 import org.apache.poi.hssf.usermodel.HSSFRichTextString;
@@ -50,12 +49,10 @@ public class ExportEmails extends XAction {
             try {
                 if ("xls".equalsIgnoreCase(getSuffix(filename))) {
                     exportToTxt(filename);
-                }
-                else {
+                } else {
                     exportToTxt(filename);
                 }
-            }
-            catch (IOException ex) {
+            } catch (IOException ex) {
                 GuiUtils.showError(Message.get("ExportError") + ex.getMessage());
             }
         }
@@ -105,8 +102,7 @@ public class ExportEmails extends XAction {
                 writer.write((String) email);
                 writer.write(13);
             }
-        }
-        finally {
+        } finally {
             if (writer != null) {
                 writer.close();
             }

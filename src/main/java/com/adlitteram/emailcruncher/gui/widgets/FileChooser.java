@@ -45,8 +45,7 @@ public class FileChooser {
             Frame frame = (cmp instanceof Frame) ? (Frame) cmp : Main.getMainframe();
             awtChooser = new FileDialog(frame, title);
             awtChooser.setLocationRelativeTo(frame);
-        }
-        else {
+        } else {
             parent = (cmp != null) ? cmp : Main.getMainframe();
             swingChooser = new JFileChooser() {
                 public void approveSelection() {
@@ -81,8 +80,7 @@ public class FileChooser {
             }
             selectedFile = new File(awtChooser.getDirectory(), awtChooser.getFile());
             return APPROVE_OPTION;
-        }
-        else {
+        } else {
             for (;;) {
                 awtChooser.setVisible(true);
                 if (awtChooser.getFile() == null) {
@@ -107,8 +105,7 @@ public class FileChooser {
             if (status == APPROVE_OPTION) {
                 selectedFile = swingChooser.getSelectedFile();
             }
-        }
-        else {
+        } else {
             for (;;) {
                 status = (text == null) ? swingChooser.showSaveDialog(parent) : swingChooser.showDialog(parent, text);
                 if (status != APPROVE_OPTION) {
@@ -150,8 +147,7 @@ public class FileChooser {
     public Component getChooser() {
         if (isNative) {
             return awtChooser;
-        }
-        else {
+        } else {
             return swingChooser;
         }
     }
@@ -170,8 +166,7 @@ public class FileChooser {
         File file = new File(dirname);
         if (isNative) {
             awtChooser.setDirectory(file.getPath());
-        }
-        else {
+        } else {
             swingChooser.setCurrentDirectory(file);
         }
     }
@@ -180,8 +175,7 @@ public class FileChooser {
         File file = new File(filename);
         if (isNative) {
             awtChooser.setFile(file.getName());
-        }
-        else {
+        } else {
             swingChooser.setSelectedFile(file);
         }
     }
@@ -189,8 +183,7 @@ public class FileChooser {
     public void addFileFilter(FileFilter filter) {
         if (isNative) {
             awtChooser.setFilenameFilter((File dir, String name) -> filter.accept(new File(dir, name)));
-        }
-        else {
+        } else {
             swingChooser.addChoosableFileFilter(filter);
         }
     }

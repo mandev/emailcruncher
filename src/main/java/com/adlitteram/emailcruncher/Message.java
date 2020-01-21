@@ -12,8 +12,7 @@ public class Message {
     public static String get(String key) {
         try {
             return resource.getString(key);
-        }
-        catch (MissingResourceException e) {
+        } catch (MissingResourceException e) {
             return key;
         }
     }
@@ -33,8 +32,7 @@ public class Message {
 
         try {
             return MessageFormat.format(resource.getString(key), args);
-        }
-        catch (MissingResourceException e) {
+        } catch (MissingResourceException e) {
             return key;
         }
     }

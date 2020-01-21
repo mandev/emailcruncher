@@ -43,8 +43,7 @@ public class DirChooser {
             awtChooser.setMode(LOAD);
             awtChooser.setDirectory(dirname);
             awtChooser.setLocationRelativeTo(frame);
-        }
-        else {
+        } else {
             swingChooser = new DirectoryDialog(frame, dirname, title);
             swingChooser.setLocationRelativeTo(frame);
         }
@@ -83,8 +82,7 @@ public class DirChooser {
     public Component getChooser() {
         if (isNative) {
             return awtChooser;
-        }
-        else {
+        } else {
             return swingChooser;
         }
     }

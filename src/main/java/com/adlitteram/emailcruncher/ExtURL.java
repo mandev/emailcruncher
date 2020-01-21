@@ -1,6 +1,9 @@
 package com.adlitteram.emailcruncher;
 
+import com.adlitteram.emailcruncher.log.Log;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 public class ExtURL {
@@ -19,10 +22,28 @@ public class ExtURL {
         this.initUrl = initUrl;
         this.inLinkCount = ic;
         this.outLinkCount = oc;
+
+    }
+
+    private URL duplicate(URL url) {
+        try {
+            return new URL(url.toString());
+        } catch (MalformedURLException ex) {
+        }
+        return null;
     }
 
     public URL getUrl() {
         return url;
+    }
+
+    public URI getUri() {
+        try {
+            return url.toURI();
+        } catch (URISyntaxException ex) {
+            Log.info(ex.toString());
+        }
+        return null;
     }
 
     public int getInLinkCount() {
@@ -36,29 +57,26 @@ public class ExtURL {
     public ExtURL concatURL(String l) {
         try {
             URL linkUrl = new URL(l);
-            if ("http".equalsIgnoreCase(linkUrl.getProtocol())) {
+            if ("http".equalsIgnoreCase(linkUrl.getProtocol())
+                    || "https".equalsIgnoreCase(linkUrl.getProtocol())) {
                 if (initUrl.getHost().equalsIgnoreCase(linkUrl.getHost())) {
                     return new ExtURL(linkUrl, initUrl, inLinkCount + 1, outLinkCount);
-                }
-                else {
+                } else {
                     return new ExtURL(linkUrl, initUrl, inLinkCount, outLinkCount + 1);
                 }
             }
-        }
-        catch (MalformedURLException ignored) {
+        } catch (MalformedURLException ignored) {
         }
 
         try {
             URL linkUrl = new URL(url, l);
             if (initUrl.getHost().equalsIgnoreCase(linkUrl.getHost())) {
                 return new ExtURL(linkUrl, initUrl, inLinkCount + 1, outLinkCount);
-            }
-            else {
+            } else {
                 return new ExtURL(linkUrl, initUrl, inLinkCount, outLinkCount + 1);
             }
 
-        }
-        catch (MalformedURLException e) {
+        } catch (MalformedURLException e) {
             return null;
         }
     }

@@ -23,11 +23,7 @@ public class RemoveDupEmails extends XAction {
         LinkedHashSet set = new LinkedHashSet(Arrays.asList(model.toArray()));    // Remove duplicates
 
         model.clear();
-
-        for (Object o : set) {
-            model.addElement(o);
-        }
-
+        set.forEach(o -> model.addElement(o));
         Log.getLogger().info("Unique emails: " + model.getSize());
     }
 }
