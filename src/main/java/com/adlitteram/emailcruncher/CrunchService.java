@@ -1,8 +1,6 @@
 package com.adlitteram.emailcruncher;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.SwingUtilities;
@@ -202,19 +200,4 @@ public class CrunchService {
 //
 //        return true;
 //    }
-    protected static URL concatURL(URL url, String link) {
-        try {
-            URL linkUrl = new URL(link);
-            if (linkUrl.getProtocol() != null) {
-                return linkUrl;
-            }
-        } catch (MalformedURLException ignored) {
-        }
-
-        try {
-            return new URL(url, link);
-        } catch (MalformedURLException e) {
-            return null;
-        }
-    }
 }
