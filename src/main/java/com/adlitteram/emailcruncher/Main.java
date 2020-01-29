@@ -7,10 +7,10 @@ import java.awt.EventQueue;
 
 public class Main {
 
-    private static Cruncher cruncher;              // Model
-    private static MainFrame mainframe;            // View
-    private static ActionController controller;    // Conroller
-    private static Configuration configuration;    // Configuration 
+    private static Cruncher cruncher;               // Model
+    private static MainFrame mainframe;             // View
+    private static ActionController controller;     // Conroller
+    private static Configuration config;            // Configuration
 
     public Main() {
     }
@@ -21,7 +21,7 @@ public class Main {
 
     public static void quit() {
         Log.info("quit");
-        configuration.save();
+        config.save();
         System.exit(0);
     }
 
@@ -30,8 +30,7 @@ public class Main {
 
         cruncher = new Cruncher();
         controller = new ActionController(cruncher);
-        configuration = new Configuration(cruncher);
-        configuration.load();
+        config = new Configuration(cruncher).load();
 
         GuiUtils.setDefaultLookAndFeel();
         EventQueue.invokeLater(() -> mainframe = new MainFrame(cruncher, controller));

@@ -35,7 +35,7 @@ public class Configuration {
         this.cruncher = cruncher;
     }
 
-    public void load() {
+    public Configuration load() {
         prefs = Preferences.userNodeForPackage(Cruncher.class);
 
         cruncher.setEmailFilter(prefs.get(EMAIL_FILTER, ""));
@@ -53,9 +53,11 @@ public class Configuration {
         cruncher.setUseProxy(prefs.getBoolean(USE_PROXY, false));
         cruncher.setProxyHost(prefs.get(PROXY_HOST, "proxy"));
         cruncher.setProxyPort(prefs.getInt(PROXY_PORT, 80));
+
+        return this;
     }
 
-    public void save() {
+    public Configuration save() {
         prefs.put(EMAIL_FILTER, cruncher.getEmailFilter());
         prefs.put(PAGE_FILTER, cruncher.getPageFilter());
         prefs.put(URL_FILTER, cruncher.getUrlFilter());
@@ -76,6 +78,8 @@ public class Configuration {
             prefs.flush();
         } catch (BackingStoreException ex) {
         }
+
+        return this;
     }
 
 }

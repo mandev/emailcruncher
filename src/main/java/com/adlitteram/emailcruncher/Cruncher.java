@@ -56,9 +56,6 @@ public class Cruncher {
         if (urlFound.add(extUrl.toString())) {
             Log.info("processUrl: " + extUrl.toString());
             executor.execute(() -> cruncherService.scan(extUrl));
-//            System.err.println("Exe QueueSize: " + executor.getQueue().size());
-//            System.err.println("Exe ActiveCount: " + executor.getActiveCount());
-//            System.err.println("Exe TaskCount: " + executor.getTaskCount());
         }
     }
 
