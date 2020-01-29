@@ -1,0 +1,2 @@
+* User real Log library
+* Remove not necessary buttons (robot, validate mails, etc.)

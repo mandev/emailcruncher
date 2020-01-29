@@ -154,50 +154,8 @@ public class CrunchService {
 
                 cruncher.processUrl(urlLink);
                 count++;
-
             }
-
         }
-
         return count;
     }
-
-//    protected boolean isRobotAllowed(ExtURL url) {
-//
-//        if (cruncher.isUseRobots()) {
-//
-//            String strHost = url.getUrl().getHost();
-//            String strRobot = "http://" + strHost + "/robots.txt";
-//            BufferedReader in = null;
-//
-//            try {
-//                URL urlRobot = new URL(strRobot);
-//
-//                HttpURLConnection urlConnection = (HttpURLConnection) urlRobot.openConnection(cruncher.getProxy());
-//                urlConnection.setAllowUserInteraction(false);
-//                urlConnection.setConnectTimeout(30000);
-//                urlConnection.setReadTimeout(30000);
-//                urlConnection.setInstanceFollowRedirects(true);
-//
-//                in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-//
-//                String urlPath = url.getUrl().getFile();
-//                String line;
-//                while ((line = in.readLine()) != null) {
-//                    int index = line.toLowerCase().indexOf("disallow:");
-//                    if (index > 0) {
-//                        if (urlPath.startsWith(line.substring(index))) {
-//                            return false;
-//                        }
-//                    }
-//                }
-//                in.close();
-//            } catch (IOException ignored) {
-//            } finally {
-//                Utils.closeQuietly(in);
-//            }
-//        }
-//
-//        return true;
-//    }
 }

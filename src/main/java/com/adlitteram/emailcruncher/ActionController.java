@@ -11,7 +11,6 @@ public class ActionController {
 
     private final Cruncher cruncher;
 
-    // Action/key Maps
     private final InputMap inputMap = new InputMap();
     private final ActionMap actionMap = new ActionMap();
 
