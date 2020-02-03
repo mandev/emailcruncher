@@ -1,12 +1,14 @@
 package com.adlitteram.emailcruncher;
 
 import com.adlitteram.emailcruncher.log.Log;
+import com.adlitteram.emailcruncher.utils.Utils;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.net.InetSocketAddress;
 import java.net.ProxySelector;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,7 +16,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-import javax.swing.DefaultListModel;
 
 public class Cruncher {
 
@@ -24,23 +25,21 @@ public class Cruncher {
     public static final int RUN = 1;
 
     private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
-    private final DefaultListModel emailListModel = new DefaultListModel();
 
     private Set<String> urlFound;
+    private Set<String> emailFound;
     private ThreadPoolExecutor executor;
 
-    private int emailCount;
     private int searchLimit = 0;
     private String urlFilter = "";
     private String pageFilter = "";
     private String emailFilter = "";
     private Pattern urlFilterPattern;
     private Pattern emailFilterPattern;
-    private boolean useRobots = false;
     private int inLinkDepth = 0;
     private int outLinkDepth = 3;
     private int timeOut = 30;
-    private int threadMax = 10;
+    private int threadMax = 4;
     private boolean useProxy = false;
     private String proxyHost = "";
     private int proxyPort = 80;
@@ -50,6 +49,7 @@ public class Cruncher {
 
     public Cruncher() {
         cruncherService = new CrunchService(this);
+        emailFound = Collections.synchronizedSet(new HashSet<>(1000));
     }
 
     public void processUrl(ExtURL extUrl) {
@@ -63,7 +63,7 @@ public class Cruncher {
         Log.info("start: " + url.toString());
         setStatus(RUN);
         urlFound = Collections.synchronizedSet(new HashSet<>(100000));
-        executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(16);
+        executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(threadMax);
         processUrl(new ExtURL(url));
     }
 
@@ -75,13 +75,16 @@ public class Cruncher {
         executor.shutdownNow();
         setStatus(STOP);
 
+        // Wait to let threadpool finish
+        Utils.sleep(1000);
+
         Log.info("stop");
         Log.info("Exe Queue Size: " + executor.getQueue().size());
         Log.info("Exe LargestPoolSize: " + executor.getLargestPoolSize());
         Log.info("Exe CompletedTaskCount: " + executor.getCompletedTaskCount());
         Log.info("Exe TaskCount: " + executor.getTaskCount());
         Log.info("URL Found List: " + urlFound.size());
-        Log.info("Extracted emails: " + emailListModel.getSize());
+        Log.info("Extracted emails: " + emailFound.size());
 
         urlFound.clear();
         executor.purge();
@@ -135,14 +138,6 @@ public class Cruncher {
         this.proxyPort = proxyPort;
     }
 
-    public int getEmailCount() {
-        return emailCount;
-    }
-
-    public DefaultListModel getEmailListModel() {
-        return emailListModel;
-    }
-
     public int getStatus() {
         return this.status;
     }
@@ -187,14 +182,6 @@ public class Cruncher {
         this.searchLimit = searchLimit;
     }
 
-    public boolean isUseRobots() {
-        return useRobots;
-    }
-
-    public void setUseRobots(boolean useRobots) {
-        this.useRobots = useRobots;
-    }
-
     public int getInLinkDepth() {
         return inLinkDepth;
     }
@@ -223,17 +210,21 @@ public class Cruncher {
         return useProxy ? ProxySelector.of(new InetSocketAddress(proxyHost, proxyPort)) : ProxySelector.getDefault();
     }
 
-    public void setEmailCount(int emailCount) {
-        int oldEmailCount = this.emailCount;
-        this.emailCount = emailCount;
-        propertyChangeSupport.firePropertyChange("emailCount", Integer.valueOf(oldEmailCount), Integer.valueOf(emailCount));
+    public ArrayList<String> getEmails() {
+        return new ArrayList<>(emailFound);
     }
 
-    public void incEmailCount() {
-        setEmailCount(emailCount + 1);
+    public void clearEmails() {
+        emailFound.clear();
+        propertyChangeSupport.firePropertyChange("clearEmails", "", null);
     }
 
-    public void decEmailCount() {
-        setEmailCount(emailCount - 1);
+    public boolean addEmail(String email) {
+        if (emailFound.add(email)) {
+            propertyChangeSupport.firePropertyChange("addEmail", "", email);
+            return true;
+        }
+        return false;
     }
+
 }

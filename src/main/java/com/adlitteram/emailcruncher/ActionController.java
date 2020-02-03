@@ -20,10 +20,7 @@ public class ActionController {
         addAction(new About(cruncher));    // or if we need : addAction(new About(), "control A");
         addAction(new ClearEmails(cruncher));
         addAction(new ExportEmails(cruncher));
-        addAction(new RemoveDupEmails(cruncher));
         addAction(new Settings(cruncher));
-        addAction(new SortEmails(cruncher));
-        addAction(new ValidateEmails(cruncher));
     }
 
     public void addAction(XAction action) {

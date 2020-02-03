@@ -16,8 +16,7 @@ public class ClearEmails extends XAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        cruncher.getEmailListModel().clear();
-        cruncher.setEmailCount(0);
+        cruncher.clearEmails();
         Log.resetHandlers();
     }
 }

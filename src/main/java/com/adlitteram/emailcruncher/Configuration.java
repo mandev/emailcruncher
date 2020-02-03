@@ -8,7 +8,6 @@ public class Configuration {
     private static final String URL_FILTER = "url_filter";
     private static final String PAGE_FILTER = "page_filter";
     private static final String EMAIL_FILTER = "email_filter";
-    private static final String USE_ROBOTS = "use_robots";
     private static final String SEARCH_LIMIT = "search_limit";
     private static final String IN_LINK_DEPTH = "in_link_depth";
     private static final String OUT_LINK_DEPTH = "out_link_depth";
@@ -32,7 +31,6 @@ public class Configuration {
         cruncher.setEmailFilter(prefs.get(EMAIL_FILTER, ""));
         cruncher.setPageFilter(prefs.get(PAGE_FILTER, ""));
         cruncher.setUrlFilter(prefs.get(URL_FILTER, ""));
-        cruncher.setUseRobots(prefs.getBoolean(USE_ROBOTS, false));
 
         cruncher.setSearchLimit(prefs.getInt(SEARCH_LIMIT, 0));
         cruncher.setInLinkDepth(prefs.getInt(IN_LINK_DEPTH, 3));
@@ -52,7 +50,6 @@ public class Configuration {
         prefs.put(EMAIL_FILTER, cruncher.getEmailFilter());
         prefs.put(PAGE_FILTER, cruncher.getPageFilter());
         prefs.put(URL_FILTER, cruncher.getUrlFilter());
-        prefs.putBoolean(USE_ROBOTS, cruncher.isUseRobots());
 
         prefs.putInt(SEARCH_LIMIT, cruncher.getSearchLimit());
         prefs.putInt(IN_LINK_DEPTH, cruncher.getInLinkDepth());

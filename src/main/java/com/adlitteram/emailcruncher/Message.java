@@ -6,12 +6,12 @@ import java.util.ResourceBundle;
 
 public class Message {
 
-    private static final String baseName = "com.adlitteram.emailcruncher.resources.bundle";
-    private static final ResourceBundle resource = ResourceBundle.getBundle(baseName);
+    private static final String BUNDLE = "com.adlitteram.emailcruncher.resources.bundle";
+    private static final ResourceBundle RESOURCE = ResourceBundle.getBundle(BUNDLE);
 
     public static String get(String key) {
         try {
-            return resource.getString(key);
+            return RESOURCE.getString(key);
         } catch (MissingResourceException e) {
             return key;
         }
@@ -31,7 +31,7 @@ public class Message {
         }
 
         try {
-            return MessageFormat.format(resource.getString(key), args);
+            return MessageFormat.format(RESOURCE.getString(key), args);
         } catch (MissingResourceException e) {
             return key;
         }

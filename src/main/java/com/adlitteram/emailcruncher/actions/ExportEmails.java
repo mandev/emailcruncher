@@ -9,11 +9,12 @@ import com.adlitteram.emailcruncher.utils.XFileFilter;
 
 import java.awt.event.ActionEvent;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.List;
 import java.util.prefs.Preferences;
-import javax.swing.DefaultListModel;
 import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -24,18 +25,16 @@ public class ExportEmails extends XAction {
 
     private static final String EXPORT_DIR = "export_dir";
     private final Cruncher cruncher;
-    private final Preferences prefs;
 
     public ExportEmails(Cruncher cruncher) {
         super("ExportEmails");
         this.cruncher = cruncher;
-        prefs = Preferences.userNodeForPackage(ExportEmails.class);
 
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        DefaultListModel model = cruncher.getEmailListModel();
+        Preferences prefs = Preferences.userNodeForPackage(ExportEmails.class);
 
         FileChooser fc = new FileChooser(Main.getMainframe(), Message.get("ExportTitle"));
         fc.setDirectory(prefs.get(EXPORT_DIR, System.getProperty("user.home")));
@@ -48,7 +47,7 @@ public class ExportEmails extends XAction {
             String filename = fc.getSelectedFile().getPath();
             try {
                 if ("xls".equalsIgnoreCase(getSuffix(filename))) {
-                    exportToTxt(filename);
+                    exportToXls(filename);
                 } else {
                     exportToTxt(filename);
                 }
@@ -71,42 +70,27 @@ public class ExportEmails extends XAction {
         HSSFWorkbook wb = new HSSFWorkbook();
         HSSFSheet sheet = wb.createSheet("emails");
 
-        // Create a row and put some cells in it. Rows are 0 based.
-        HSSFRow row = sheet.createRow((short) 0);
-
         // Create a cell and put a value in it.
-        DefaultListModel model = cruncher.getEmailListModel();
-        Object[] emails = model.toArray();
-
-        for (int i = 0; i < emails.length; i++) {
-            row.createCell((short) i).setCellValue(new HSSFRichTextString((String) emails[i]));
+        List<String> emails = cruncher.getEmails();
+        for (int i = 0; i < emails.size(); i++) {
+            // Create a row and put some cells in it. Rows are 0 based.
+            HSSFRow row = sheet.createRow(i);
+            row.createCell(0).setCellValue(new HSSFRichTextString(emails.get(i)));
         }
 
-        try (FileOutputStream os = new FileOutputStream(filename)) {
-            wb.write(os);
-        }
+        wb.write(new File(filename));
     }
 
     private void exportToTxt(String filename) throws IOException {
 
-        BufferedWriter writer = null;
+        try (FileOutputStream out = new FileOutputStream(filename);
+                OutputStreamWriter osw = new OutputStreamWriter(out, "UTF-8");
+                BufferedWriter writer = new BufferedWriter(osw)) {
 
-        try {
-            FileOutputStream out = new FileOutputStream(filename);
-            writer = new BufferedWriter(new OutputStreamWriter(out, "8859_1"));
-
-            DefaultListModel model = cruncher.getEmailListModel();
-            Object[] emails = model.toArray();
-
-            for (Object email : emails) {
-                writer.write((String) email);
+            for (String email : cruncher.getEmails()) {
+                writer.write(email);
                 writer.write(13);
             }
-        } finally {
-            if (writer != null) {
-                writer.close();
-            }
         }
-
     }
 }

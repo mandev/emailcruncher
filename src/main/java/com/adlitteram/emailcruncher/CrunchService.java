@@ -3,7 +3,6 @@ package com.adlitteram.emailcruncher;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.swing.SwingUtilities;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -16,7 +15,7 @@ import org.apache.http.util.EntityUtils;
 public class CrunchService {
 
     private static final EmailValidator EMAIL_VALIDATOR = EmailValidator.getInstance();
-    private static final Pattern EMAIL_PATTERN = Pattern.compile("([a-z0-9._-]+@[a-z0-9][a-z0-9.-]{0,61}[a-z0-9]\\.[a-z]{2,6})");
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("([a-z0-9._-]+@[a-z0-9.-]+\\.[a-z]{2,61})");
 
     private final Cruncher cruncher;
 
@@ -55,18 +54,11 @@ public class CrunchService {
         while (m.find()) {
             final String email = m.group().trim();
             if (EMAIL_VALIDATOR.isValid(email)) {
-                if (cruncher.getEmailFilterPattern() != null) {
-                    if (cruncher.getEmailFilterPattern().matcher(email).matches()) {
-                        continue;
-                    }
+                Pattern filter = cruncher.getEmailFilterPattern();
+                if (filter == null || !filter.matcher(email).matches()) {
+                    count++;
+                    cruncher.addEmail(email);
                 }
-                count++;
-                SwingUtilities.invokeLater(() -> {
-                    if (!cruncher.getEmailListModel().contains(email)) {
-                        cruncher.incEmailCount();
-                        cruncher.getEmailListModel().addElement(email);
-                    }
-                });
             }
         }
         return count;

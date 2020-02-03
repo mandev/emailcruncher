@@ -30,63 +30,58 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
                   <Component id="optionPanel" alignment="0" max="32767" attributes="3"/>
-                  <Component id="jSplitPane1" alignment="0" pref="602" max="32767" attributes="2"/>
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="emailLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="emailCountLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="415" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Component id="goButton" linkSize="1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="stopButton" linkSize="1" min="-2" pref="71" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="urlLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="urlCombo" pref="575" max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="sortEmailsButton" linkSize="2" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="validateEmailsButton" linkSize="2" min="-2" pref="70" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="clearEmailsButton" linkSize="2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="exportToButton" linkSize="2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="settingsButton" linkSize="2" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="135" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Component id="About" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
+                  </Group>
+                  <Component id="jSplitPane1" alignment="0" pref="1078" max="32767" attributes="2"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="urlLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="urlCombo" max="32767" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" max="-2" attributes="0">
                   <Component id="About" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="sortEmailsButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="validateEmailsButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="clearEmailsButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="exportToButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="settingsButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
               <Component id="optionPanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="urlLabel" min="-2" max="-2" attributes="0"/>
-                  <Component id="urlCombo" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="urlCombo" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="urlLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
-              <Component id="jSplitPane1" pref="397" max="32767" attributes="0"/>
+              <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+              <Component id="jSplitPane1" pref="436" max="32767" attributes="0"/>
               <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="goButton" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -119,34 +114,6 @@
       <AuxValues>
         <AuxValue name="generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
       </AuxValues>
-    </Component>
-    <Component class="javax.swing.JButton" name="sortEmailsButton">
-      <Properties>
-        <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="controller.getAction(&quot;SortEmails&quot;)" type="code"/>
-        </Property>
-        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="com/adlitteram/emailcruncher/resources/bundle.properties" key="SortEmails" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-        </Property>
-        <Property name="focusPainted" type="boolean" value="false"/>
-        <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-          <Insets value="[10, 10, 10, 10]"/>
-        </Property>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="validateEmailsButton">
-      <Properties>
-        <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="controller.getAction(&quot;ValidateEmails&quot;)" type="code"/>
-        </Property>
-        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="com/adlitteram/emailcruncher/resources/bundle.properties" key="MainFrame.validateEmailsButton.text_1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-        </Property>
-        <Property name="focusPainted" type="boolean" value="false"/>
-        <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-          <Insets value="[10, 10, 10, 10]"/>
-        </Property>
-      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="clearEmailsButton">
       <Properties>
@@ -194,31 +161,22 @@
                       <Component id="skipPageLabel" alignment="1" min="-2" max="-2" attributes="1"/>
                   </Group>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="robotsCheck" min="-2" max="-2" attributes="2"/>
-                          <EmptySpace min="253" pref="253" max="253" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="skipPageField" alignment="0" pref="580" max="32767" attributes="2"/>
-                              <Component id="skipEmailField" alignment="0" pref="580" max="32767" attributes="2"/>
-                              <Component id="skipUrlField" alignment="0" pref="580" max="32767" attributes="2"/>
-                          </Group>
-                          <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="limitLabel" alignment="1" min="-2" max="-2" attributes="0"/>
-                              <Component id="outDepthLabel" min="-2" max="-2" attributes="0"/>
-                              <Component id="inDepthLabel" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="limitCombo" alignment="0" max="32767" attributes="3"/>
-                              <Component id="outDepthCombo" alignment="0" min="0" pref="0" max="32767" attributes="1"/>
-                              <Component id="inDepthCombo" alignment="0" min="0" pref="0" max="32767" attributes="1"/>
-                          </Group>
-                          <EmptySpace min="-2" max="-2" attributes="0"/>
-                      </Group>
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Component id="skipPageField" alignment="0" pref="580" max="32767" attributes="2"/>
+                      <Component id="skipEmailField" alignment="0" max="32767" attributes="2"/>
+                      <Component id="skipUrlField" alignment="0" max="32767" attributes="2"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Component id="limitLabel" alignment="1" min="-2" max="-2" attributes="0"/>
+                      <Component id="outDepthLabel" min="-2" max="-2" attributes="0"/>
+                      <Component id="inDepthLabel" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="outDepthCombo" pref="0" max="32767" attributes="1"/>
+                      <Component id="inDepthCombo" pref="0" max="32767" attributes="1"/>
+                      <Component id="limitCombo" alignment="0" pref="136" max="32767" attributes="3"/>
                   </Group>
               </Group>
           </Group>
@@ -226,38 +184,41 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="skipUrlLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="skipUrlField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="skipUrlLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="skipUrlField" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="skipEmailLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="skipEmailField" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="skipPageLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="skipPageField" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="limitLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="limitCombo" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="inDepthCombo" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="inDepthLabel" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="outDepthCombo" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="outDepthLabel" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="skipEmailLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="skipEmailField" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="skipPageLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="skipPageField" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="robotsCheck" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="limitLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="limitCombo" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="inDepthCombo" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="inDepthLabel" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="outDepthCombo" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="outDepthLabel" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
-                  </Group>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -304,24 +265,6 @@
               <ResourceString bundle="com/adlitteram/emailcruncher/resources/bundle.properties" key="SkipEmail" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
             </Property>
           </Properties>
-        </Component>
-        <Component class="javax.swing.JCheckBox" name="robotsCheck">
-          <Properties>
-            <Property name="selected" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="cruncher.isUseRobots()" type="code"/>
-            </Property>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="com/adlitteram/emailcruncher/resources/bundle.properties" key="FollowRobot" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
-            </Property>
-            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-              <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                <EmptyBorder bottom="0" left="0" right="0" top="0"/>
-              </Border>
-            </Property>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="robotsCheckActionPerformed"/>
-          </Events>
         </Component>
         <Component class="javax.swing.JComboBox" name="limitCombo">
           <Properties>
@@ -438,20 +381,22 @@
           </StringArray>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="urlComboActionPerformed"/>
+      </Events>
     </Component>
     <Container class="javax.swing.JSplitPane" name="jSplitPane1">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="null"/>
         </Property>
-        <Property name="dividerLocation" type="int" value="130"/>
+        <Property name="dividerLocation" type="int" value="250"/>
         <Property name="dividerSize" type="int" value="6"/>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="0" green="0" red="0" type="rgb"/>
         </Property>
         <Property name="orientation" type="int" value="0"/>
         <Property name="resizeWeight" type="double" value="0.5"/>
-        <Property name="lastDividerLocation" type="int" value="130"/>
         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[0, 0]"/>
         </Property>
@@ -472,11 +417,11 @@
             <Component class="javax.swing.JList" name="emailsList">
               <Properties>
                 <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="cruncher.getEmailListModel()" type="code"/>
+                  <Connection code="this.emailListModel" type="code"/>
                 </Property>
                 <Property name="dragEnabled" type="boolean" value="true"/>
                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[100, 100]"/>
+                  <Dimension value="[100, 200]"/>
                 </Property>
               </Properties>
             </Component>
@@ -497,20 +442,20 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="logScrollPane" alignment="0" pref="1022" max="32767" attributes="2"/>
-                  <Group type="102" alignment="0" attributes="0">
+                  <Group type="102" attributes="0">
                       <Component id="logWindowLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="989" max="32767" attributes="0"/>
                   </Group>
+                  <Component id="logScrollPane" max="32767" attributes="2"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                       <Component id="logWindowLabel" min="-2" pref="17" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="logScrollPane" pref="95" max="32767" attributes="0"/>
+                      <Component id="logScrollPane" pref="353" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
