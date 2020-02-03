@@ -24,21 +24,23 @@ public class MainFrame extends JFrame implements PropertyChangeListener {
     private final ActionController controller;
     private final DefaultListModel<String> emailListModel = new DefaultListModel<>();
 
-    public MainFrame(Cruncher cruncher, ActionController controller) {
+    private MainFrame(Cruncher cruncher, ActionController controller) {
         this.cruncher = cruncher;
         this.controller = controller;
-
         initComponents();
 
-        setIconImage(GuiUtils.loadImage("resources/icons/cruncher.png"));
-        cruncher.addPropertyChangeListener(this);
-        Log.addHandler(new LogAreaHandler(logArea));
-
-        getRootPane().setDefaultButton(goButton);
         stopButton.setEnabled(false);
         urlCombo.requestFocusInWindow();
+        cruncher.addPropertyChangeListener(this);
+        Log.addHandler(new LogAreaHandler(logArea));
+    }
 
-        setVisible(true);
+    public static MainFrame create(Cruncher cruncher, ActionController controller) {
+        MainFrame mainframe = new MainFrame(cruncher, controller);
+        mainframe.setIconImage(GuiUtils.loadImage("resources/icons/cruncher.png"));
+        mainframe.getRootPane().setDefaultButton(mainframe.goButton);
+        mainframe.setVisible(true);
+        return mainframe;
     }
 
     @Override
@@ -49,14 +51,21 @@ public class MainFrame extends JFrame implements PropertyChangeListener {
                 emailListModel.addElement(evt.getNewValue().toString());
                 emailCountLabel.setText(String.valueOf(emailListModel.size()));
             });
-        } else if ("clearEmail".equals(propertyName)) {
+        }
+        else if ("clearEmails".equals(propertyName)) {
             SwingUtilities.invokeLater(() -> {
                 emailListModel.clear();
                 emailCountLabel.setText(String.valueOf(emailListModel.size()));
             });
-        } else if ("status".equals(propertyName)) {
-            SwingUtilities.invokeLater(() -> updateGuiStatus((Integer) evt.getNewValue()));
         }
+        else if ("status".equals(propertyName)) {
+            SwingUtilities.invokeLater(() -> {
+                updateGuiStatus((Integer) evt.getNewValue()) ;
+                urlCombo.setModel(new DefaultComboBoxModel(cruncher.getUrls()));
+            });
+        }
+        
+        repaint();
     }
 
     private void updateGuiStatus(int status) {
@@ -65,7 +74,8 @@ public class MainFrame extends JFrame implements PropertyChangeListener {
             goButton.setEnabled(false);
             stopButton.setEnabled(true);
             getRootPane().setDefaultButton(stopButton);
-        } else {
+        }
+        else {
             stopButton.setEnabled(false);
             goButton.setEnabled(true);
             getRootPane().setDefaultButton(goButton);
@@ -245,7 +255,7 @@ public class MainFrame extends JFrame implements PropertyChangeListener {
         });
 
         urlCombo.setEditable(true);
-        urlCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "http://" }));
+        urlCombo.setModel(new DefaultComboBoxModel(cruncher.getUrls()));
         urlCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 urlComboActionPerformed(evt);
@@ -402,11 +412,14 @@ public class MainFrame extends JFrame implements PropertyChangeListener {
                urlCombo.removeItemAt(12);
            }
 
-       } catch (MalformedURLException e) {
+       }
+       catch (MalformedURLException e) {
            JOptionPane.showMessageDialog(this, Message.get("EnterValidURL"));
-       } catch (NumberFormatException e) {
+       }
+       catch (NumberFormatException e) {
            JOptionPane.showMessageDialog(this, Message.get("EnterValidLinkDepth"));
-       } catch (PatternSyntaxException e) {
+       }
+       catch (PatternSyntaxException e) {
            JOptionPane.showMessageDialog(this, Message.get("EnterValidRegexp"));
        }
    }//GEN-LAST:event_goButtonActionPerformed

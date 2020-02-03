@@ -1,6 +1,7 @@
 package com.adlitteram.emailcruncher;
 
 import com.adlitteram.emailcruncher.log.Log;
+import com.adlitteram.emailcruncher.utils.LimitedList;
 import com.adlitteram.emailcruncher.utils.Utils;
 
 import java.beans.PropertyChangeListener;
@@ -9,15 +10,33 @@ import java.net.InetSocketAddress;
 import java.net.ProxySelector;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.prefs.Preferences;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 public class Cruncher {
+
+    private static final String URLS = "urls";
+    private static final String URL_FILTER = "url_filter";
+    private static final String PAGE_FILTER = "page_filter";
+    private static final String EMAIL_FILTER = "email_filter";
+    private static final String SEARCH_LIMIT = "search_limit";
+    private static final String IN_LINK_DEPTH = "in_link_depth";
+    private static final String OUT_LINK_DEPTH = "out_link_depth";
+    private static final String TIME_OUT = "time_out";
+    private static final String THREAD_MAX = "thread_max";
+    private static final String USE_PROXY = "use_proxy";
+    private static final String PROXY_HOST = "proxy_host";
+    private static final String PROXY_PORT = "proxy_port";
 
     public static final int SITE = 0;
     public static final int ALL = 1;
@@ -27,29 +46,65 @@ public class Cruncher {
     private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
     private Set<String> urlFound;
-    private Set<String> emailFound;
+    private final Set<String> emailFound;
     private ThreadPoolExecutor executor;
+    private int status = STOP;
 
-    private int searchLimit = 0;
-    private String urlFilter = "";
-    private String pageFilter = "";
-    private String emailFilter = "";
+    private LimitedList<String> urls;
+
+    private String urlFilter;
+    private String pageFilter;
+    private String emailFilter;
     private Pattern urlFilterPattern;
     private Pattern emailFilterPattern;
-    private int inLinkDepth = 0;
-    private int outLinkDepth = 3;
-    private int timeOut = 30;
-    private int threadMax = 4;
-    private boolean useProxy = false;
-    private String proxyHost = "";
-    private int proxyPort = 80;
-    private int status = STOP;
+    private int searchLimit;
+    private int inLinkDepth;
+    private int outLinkDepth;
+    private int timeOut;
+    private int threadMax;
+    private boolean useProxy;
+    private String proxyHost;
+    private int proxyPort;
 
     private final CrunchService cruncherService;
 
-    public Cruncher() {
+    private Cruncher(Preferences prefs) {
+        urls = new LimitedList(Arrays.asList(prefs.get(URLS, "").split(";")));
+        emailFilter = prefs.get(EMAIL_FILTER, "");
+        pageFilter = prefs.get(PAGE_FILTER, "");
+        urlFilter = prefs.get(URL_FILTER, "");
+        searchLimit = prefs.getInt(SEARCH_LIMIT, 0);
+        inLinkDepth = prefs.getInt(IN_LINK_DEPTH, 3);
+        outLinkDepth = prefs.getInt(OUT_LINK_DEPTH, 3);
+        timeOut = prefs.getInt(TIME_OUT, 120);
+        threadMax = prefs.getInt(THREAD_MAX, 10);
+        useProxy = prefs.getBoolean(USE_PROXY, false);
+        proxyHost = prefs.get(PROXY_HOST, "proxy");
+        proxyPort = prefs.getInt(PROXY_PORT, 8);
+
         cruncherService = new CrunchService(this);
         emailFound = Collections.synchronizedSet(new HashSet<>(1000));
+    }
+
+    public static Cruncher create(Preferences prefs) {
+        return new Cruncher(prefs);
+    }
+
+    public Preferences update(Preferences prefs) {      
+        prefs.put(URLS, String.join(";", urls));
+        prefs.put(EMAIL_FILTER, emailFilter);
+        prefs.put(PAGE_FILTER, pageFilter);
+        prefs.put(URL_FILTER, urlFilter);
+        prefs.putInt(SEARCH_LIMIT, searchLimit);
+        prefs.putInt(IN_LINK_DEPTH, inLinkDepth);
+        prefs.putInt(OUT_LINK_DEPTH, outLinkDepth);
+        prefs.putInt(TIME_OUT, timeOut);
+        prefs.putInt(THREAD_MAX, threadMax);
+        prefs.putBoolean(USE_PROXY, useProxy);
+        prefs.put(PROXY_HOST, proxyHost);
+        prefs.putInt(PROXY_PORT, proxyPort);
+
+        return prefs;
     }
 
     public void processUrl(ExtURL extUrl) {
@@ -62,6 +117,7 @@ public class Cruncher {
     public void start(URL url) {
         Log.info("start: " + url.toString());
         setStatus(RUN);
+        urls.addFirst(url.toString());
         urlFound = Collections.synchronizedSet(new HashSet<>(100000));
         executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(threadMax);
         processUrl(new ExtURL(url));
@@ -72,11 +128,14 @@ public class Cruncher {
     }
 
     private void doStop() {
-        executor.shutdownNow();
         setStatus(STOP);
-
-        // Wait to let threadpool finish
-        Utils.sleep(1000);
+        try {
+            // Wait to let threadpool finish
+            executor.shutdownNow();
+            executor.awaitTermination(10, TimeUnit.SECONDS);
+        }
+        catch (InterruptedException ex) {
+        }
 
         Log.info("stop");
         Log.info("Exe Queue Size: " + executor.getQueue().size());
@@ -227,4 +286,7 @@ public class Cruncher {
         return false;
     }
 
+    public String[] getUrls() {
+        return urls.toArray(new String[0]) ;
+    }
 }

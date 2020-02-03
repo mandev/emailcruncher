@@ -9,18 +9,19 @@ import javax.swing.KeyStroke;
 
 public class ActionController {
 
-    private final Cruncher cruncher;
-
     private final InputMap inputMap = new InputMap();
     private final ActionMap actionMap = new ActionMap();
 
-    public ActionController(Cruncher cruncher) {
-        this.cruncher = cruncher;
+    private ActionController() {
+    }
 
-        addAction(new About(cruncher));    // or if we need : addAction(new About(), "control A");
-        addAction(new ClearEmails(cruncher));
-        addAction(new ExportEmails(cruncher));
-        addAction(new Settings(cruncher));
+    public static ActionController create(Cruncher cruncher) {
+        ActionController ac = new ActionController();
+        ac.addAction(new About(cruncher));    // or if we need : addAction(new About(), "control A");
+        ac.addAction(new ClearEmails(cruncher));
+        ac.addAction(new ExportEmails(cruncher));
+        ac.addAction(new Settings(cruncher));
+        return ac;
     }
 
     public void addAction(XAction action) {

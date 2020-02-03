@@ -15,7 +15,7 @@ import org.apache.http.util.EntityUtils;
 public class CrunchService {
 
     private static final EmailValidator EMAIL_VALIDATOR = EmailValidator.getInstance();
-    private static final Pattern EMAIL_PATTERN = Pattern.compile("([a-z0-9._-]+@[a-z0-9.-]+\\.[a-z]{2,61})");
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("([a-z0-9._-]+@[a-z0-9.-]+\\.[a-z]{2,8})");
 
     private final Cruncher cruncher;
 
@@ -42,7 +42,8 @@ public class CrunchService {
                     return entity == null ? null : EntityUtils.toString(entity);
                 }
             }
-        } catch (IOException ex) {
+        }
+        catch (IOException ex) {
             System.err.println(ex);
         }
         return null;
@@ -50,14 +51,17 @@ public class CrunchService {
 
     protected int searchEmail(String content) {
         int count = 0;
-        Matcher m = EMAIL_PATTERN.matcher(content.toLowerCase());
-        while (m.find()) {
-            final String email = m.group().trim();
-            if (EMAIL_VALIDATOR.isValid(email)) {
-                Pattern filter = cruncher.getEmailFilterPattern();
-                if (filter == null || !filter.matcher(email).matches()) {
-                    count++;
-                    cruncher.addEmail(email);
+
+        if (content.contains("@")) {
+            Matcher m = EMAIL_PATTERN.matcher(content.toLowerCase());
+            while (m.find()) {
+                final String email = m.group().trim();
+                if (EMAIL_VALIDATOR.isValid(email)) {
+                    Pattern filter = cruncher.getEmailFilterPattern();
+                    if (filter == null || !filter.matcher(email).matches()) {
+                        count++;
+                        cruncher.addEmail(email);
+                    }
                 }
             }
         }
