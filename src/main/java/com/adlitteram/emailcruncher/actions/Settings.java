@@ -19,8 +19,8 @@ public class Settings extends XAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Object c = e.getSource();
-        Window window = (c instanceof Component) ? SwingUtilities.getWindowAncestor((Component) c) : null;
+        var c = e.getSource();
+        var window = (c instanceof Component) ? SwingUtilities.getWindowAncestor((Component) c) : null;
         new SettingsDialog(window, cruncher);
     }
 }

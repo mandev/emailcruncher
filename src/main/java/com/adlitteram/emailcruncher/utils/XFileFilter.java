@@ -19,10 +19,10 @@ public class XFileFilter extends javax.swing.filechooser.FileFilter implements j
     }
 
     private XFileFilter(String ext, String desc, boolean ad) {
-        StringTokenizer st = new StringTokenizer(ext, "|");
+        var st = new StringTokenizer(ext, "|");
         exts = new String[st.countTokens()];
 
-        for (int i = 0; i < exts.length; i++) {
+        for (var i = 0; i < exts.length; i++) {
             exts[i] = st.nextToken();
         }
 
@@ -42,8 +42,8 @@ public class XFileFilter extends javax.swing.filechooser.FileFilter implements j
         }
 
         String ext = getSuffix(file.getName());
-        for (String ext1 : exts) {
-            if (ext1.equalsIgnoreCase(ext)) {
+        for (String e : exts) {
+            if (e.equalsIgnoreCase(ext)) {
                 return true;
             }
         }
@@ -60,7 +60,7 @@ public class XFileFilter extends javax.swing.filechooser.FileFilter implements j
     }
 
     private static String getSuffix(String str) {
-        int i = str.lastIndexOf('.');
+        var i = str.lastIndexOf('.');
         if ((i > 0) && (i < (str.length() - 1))) {
             return str.substring(i + 1);
         }

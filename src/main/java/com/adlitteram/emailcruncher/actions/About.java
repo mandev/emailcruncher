@@ -20,8 +20,8 @@ public class About extends XAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Object c = e.getSource();
-        Window window = (c instanceof Component) ? SwingUtilities.getWindowAncestor((Component) c) : null;
+        var c = e.getSource();
+        var window = (c instanceof Component) ? SwingUtilities.getWindowAncestor((Component) c) : null;
         new AboutDialog((Frame) window, true);
     }
 }

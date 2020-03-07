@@ -2,7 +2,6 @@ package com.adlitteram.emailcruncher;
 
 import com.adlitteram.emailcruncher.log.Log;
 import com.adlitteram.emailcruncher.utils.LimitedList;
-import com.adlitteram.emailcruncher.utils.Utils;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -17,8 +16,6 @@ import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -49,8 +46,7 @@ public class Cruncher {
     private final Set<String> emailFound;
     private ThreadPoolExecutor executor;
     private int status = STOP;
-
-    private LimitedList<String> urls;
+    private final LimitedList<String> urls;
 
     private String urlFilter;
     private String pageFilter;
@@ -202,7 +198,7 @@ public class Cruncher {
     }
 
     public void setStatus(int status) {
-        int oldStatus = this.status;
+        var oldStatus = this.status;
         this.status = status;
         propertyChangeSupport.firePropertyChange("status", Integer.valueOf(oldStatus), Integer.valueOf(status));
     }

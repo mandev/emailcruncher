@@ -16,7 +16,7 @@ public class ActionController {
     }
 
     public static ActionController create(Cruncher cruncher) {
-        ActionController ac = new ActionController();
+        var ac = new ActionController();
         ac.addAction(new About(cruncher));    // or if we need : addAction(new About(), "control A");
         ac.addAction(new ClearEmails(cruncher));
         ac.addAction(new ExportEmails(cruncher));
@@ -26,7 +26,7 @@ public class ActionController {
 
     public void addAction(XAction action) {
         actionMap.put(action.getName(), action);
-        KeyStroke key = (KeyStroke) action.getValue(AbstractAction.ACCELERATOR_KEY);
+        var key = (KeyStroke) action.getValue(AbstractAction.ACCELERATOR_KEY);
         if (key != null) {
             inputMap.put(key, action.getName());
         }

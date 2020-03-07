@@ -24,7 +24,7 @@ public class CrunchService {
     }
 
     public void scan(ExtURL url) {
-        String content = getContent(url);
+        var content = getContent(url);
         if (content != null) {
             searchURL(content, url);
             searchEmail(content);
@@ -33,12 +33,12 @@ public class CrunchService {
 
     protected String getContent(ExtURL url) {
 
-        try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
-            HttpGet httpGet = new HttpGet(url.getUri());
-            try (CloseableHttpResponse response = httpclient.execute(httpGet)) {
-                Header contentType = response.getFirstHeader("content-type");
+        try (var httpclient = HttpClients.createDefault()) {
+            var httpGet = new HttpGet(url.getUri());
+            try (var response = httpclient.execute(httpGet)) {
+                var contentType = response.getFirstHeader("content-type");
                 if (contentType != null && contentType.getValue().contains("text/")) {
-                    HttpEntity entity = response.getEntity();
+                    var entity = response.getEntity();
                     return entity == null ? null : EntityUtils.toString(entity);
                 }
             }
@@ -50,14 +50,14 @@ public class CrunchService {
     }
 
     protected int searchEmail(String content) {
-        int count = 0;
+        var count = 0;
 
         if (content.contains("@")) {
-            Matcher m = EMAIL_PATTERN.matcher(content.toLowerCase());
+            var m = EMAIL_PATTERN.matcher(content.toLowerCase());
             while (m.find()) {
-                final String email = m.group().trim();
+                final var email = m.group().trim();
                 if (EMAIL_VALIDATOR.isValid(email)) {
-                    Pattern filter = cruncher.getEmailFilterPattern();
+                    var filter = cruncher.getEmailFilterPattern();
                     if (filter == null || !filter.matcher(email).matches()) {
                         count++;
                         cruncher.addEmail(email);
@@ -69,7 +69,7 @@ public class CrunchService {
     }
 
     protected int searchURL(String content, ExtURL url) {
-        int count = 0;
+        var count = 0;
 
         if (cruncher.getPageFilter().length() > 0) {
             if (content.contains(cruncher.getPageFilter())) {
@@ -77,31 +77,31 @@ public class CrunchService {
             }
         }
 
-        int index = 0;
+        var index = 0;
         while ((index = content.indexOf("<a", index)) != -1) {
 
             index += 2;
 
-            int hrefIndex = content.indexOf("href", index);
+            var hrefIndex = content.indexOf("href", index);
             if (hrefIndex == -1) {
                 continue;
             }
 
-            int equalIndex = content.indexOf("=", hrefIndex);
+            var equalIndex = content.indexOf("=", hrefIndex);
             if (equalIndex == -1) {
                 continue;
             }
 
-            int quoteIndex = content.indexOf("\"", equalIndex);
+            var quoteIndex = content.indexOf("\"", equalIndex);
             if (quoteIndex == -1) {
                 continue;
             }
 
-            int index2 = quoteIndex + 1;
+            var index2 = quoteIndex + 1;
             if ((index2 = content.indexOf("\"", index2)) == -1) {
                 continue;
             }
-            String link = content.substring(quoteIndex + 1, index2).trim();
+            var link = content.substring(quoteIndex + 1, index2).trim();
 
             if (link.startsWith("mailto:")) {
                 continue;

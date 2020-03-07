@@ -34,9 +34,9 @@ public class ExportEmails extends XAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Preferences prefs = Preferences.userNodeForPackage(ExportEmails.class);
+        var prefs = Preferences.userNodeForPackage(ExportEmails.class);
 
-        FileChooser fc = new FileChooser(Main.getMainframe(), Message.get("ExportTitle"));
+        var fc = new FileChooser(Main.getMainframe(), Message.get("ExportTitle"));
         fc.setDirectory(prefs.get(EXPORT_DIR, System.getProperty("user.home")));
         fc.setFile("");
         fc.addFileFilter(XFileFilter.XLS);
@@ -67,14 +67,14 @@ public class ExportEmails extends XAction {
     }
 
     private void exportToXls(String filename) throws IOException {
-        HSSFWorkbook wb = new HSSFWorkbook();
-        HSSFSheet sheet = wb.createSheet("emails");
+        var wb = new HSSFWorkbook();
+        var sheet = wb.createSheet("emails");
 
         // Create a cell and put a value in it.
         List<String> emails = cruncher.getEmails();
-        for (int i = 0; i < emails.size(); i++) {
+        for (var i = 0; i < emails.size(); i++) {
             // Create a row and put some cells in it. Rows are 0 based.
-            HSSFRow row = sheet.createRow(i);
+            var row = sheet.createRow(i);
             row.createCell(0).setCellValue(new HSSFRichTextString(emails.get(i)));
         }
 
@@ -83,11 +83,11 @@ public class ExportEmails extends XAction {
 
     private void exportToTxt(String filename) throws IOException {
 
-        try (FileOutputStream out = new FileOutputStream(filename);
-                OutputStreamWriter osw = new OutputStreamWriter(out, "UTF-8");
-                BufferedWriter writer = new BufferedWriter(osw)) {
+        try (var out = new FileOutputStream(filename);
+                var osw = new OutputStreamWriter(out, "UTF-8");
+                var writer = new BufferedWriter(osw)) {
 
-            for (String email : cruncher.getEmails()) {
+            for (var email : cruncher.getEmails()) {
                 writer.write(email);
                 writer.write(13);
             }

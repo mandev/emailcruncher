@@ -56,7 +56,7 @@ public class ExtURL {
 
     public ExtURL concatURL(String l) {
         try {
-            URL linkUrl = new URL(l);
+            var linkUrl = new URL(l);
             if ("http".equalsIgnoreCase(linkUrl.getProtocol())
                     || "https".equalsIgnoreCase(linkUrl.getProtocol())) {
                 if (initUrl.getHost().equalsIgnoreCase(linkUrl.getHost())) {
@@ -69,7 +69,7 @@ public class ExtURL {
         }
 
         try {
-            URL linkUrl = new URL(url, l);
+            var linkUrl = new URL(url, l);
             if (initUrl.getHost().equalsIgnoreCase(linkUrl.getHost())) {
                 return new ExtURL(linkUrl, initUrl, inLinkCount + 1, outLinkCount);
             } else {
@@ -90,7 +90,7 @@ public class ExtURL {
             return false;
         }
 
-        ExtURL eu = (ExtURL) obj;
+        var eu = (ExtURL) obj;
         return (this.getUrl().equals(eu.getUrl()));
     }
 

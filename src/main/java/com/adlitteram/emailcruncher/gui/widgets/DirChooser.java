@@ -30,11 +30,6 @@ public class DirChooser {
     }
 
     public DirChooser(Component cmp, String dirname, String title) {
-        String dirname1 = dirname;
-        if (dirname == null) {
-            dirname = System.getProperty("user.home");
-        }
-
         Frame frame = (cmp instanceof Frame) ? (Frame) cmp : Main.getMainframe();
         isNative = Plateform.isMacOSX();
 

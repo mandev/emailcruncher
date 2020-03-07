@@ -58,11 +58,8 @@ abstract public class XAction extends AbstractAction {
     }
 
     public int getMnemonic() {
-        Integer n = (Integer) getValue(MNEMONIC_KEY);
-        if (n != null) {
-            return n;
-        }
-        return -1;
+        var n = (Integer) getValue(MNEMONIC_KEY);
+        return n == null ? -1 : n ;
     }
 
     public String getToolTipText() {
