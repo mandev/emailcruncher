@@ -44,7 +44,3 @@ Contributions are welcome.
 ## Licence
 
 emailcruncher is provided under GPL v3 licence.
-
-## Copyright
-
-Copyright Emmanuel Deviller (c) 2010-2020
