@@ -2,7 +2,6 @@ package com.adlitteram.emailcruncher.actions;
 
 import com.adlitteram.emailcruncher.Cruncher;
 import com.adlitteram.emailcruncher.log.Log;
-
 import java.awt.event.ActionEvent;
 
 public class ClearEmails extends XAction {

@@ -1,7 +1,6 @@
 package com.adlitteram.emailcruncher.gui.widgets;
 
 import com.adlitteram.emailcruncher.Message;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -46,7 +45,7 @@ public class DirectoryDialog extends JDialog {
         this.dirname = dirname;
         status = CANCEL_OPTION;
 
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         getContentPane().add(buildDirectoryPanel(), BorderLayout.CENTER);
         getContentPane().add(buildButtonPanel(), BorderLayout.SOUTH);
         setLocationRelativeTo(frame);
@@ -54,7 +53,7 @@ public class DirectoryDialog extends JDialog {
     }
 
     private JComponent buildDirectoryPanel() {
-        File dir = new File(dirname);
+        var dir = new File(dirname);
         if (!dir.isDirectory()) {
             dc = new DirectoryChooser();
         } else {
@@ -69,7 +68,7 @@ public class DirectoryDialog extends JDialog {
         });
 
         dc.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
-        JScrollPane sp = new JScrollPane(dc);
+        var sp = new JScrollPane(dc);
         sp.setPreferredSize(new Dimension(250, 300));
         return sp;
     }
@@ -80,13 +79,13 @@ public class DirectoryDialog extends JDialog {
         // okButton.setEnabled(false) ;
         okButton.addActionListener(approveListener);
 
-        JButton cancelButton = new JButton(Message.get("Cancel"));
+        var cancelButton = new JButton(Message.get("Cancel"));
         cancelButton.addActionListener((ActionEvent e) -> {
             dispose();
             status = CANCEL_OPTION;
         });
 
-        JPanel panel = new JPanel(new GridLayout(1, 0));
+        var panel = new JPanel(new GridLayout(1, 0));
         panel.add(okButton);
         panel.add(cancelButton);
         return panel;

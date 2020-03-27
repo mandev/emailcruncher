@@ -55,7 +55,7 @@ public class LogAreaHandler extends Handler {
         @Override
         public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
             super.insertString(offs, str, a);
-            int tooMany = getLength() - 32000;
+            var tooMany = getLength() - 32000;
             if (tooMany > 0) {
                 remove(0, tooMany);
             }

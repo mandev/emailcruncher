@@ -42,7 +42,7 @@ public class FileChooser {
         isNative = Plateform.isMacOSX();
 
         if (isNative) {
-            Frame frame = (cmp instanceof Frame) ? (Frame) cmp : Main.getMainframe();
+            var frame = (cmp instanceof Frame) ? (Frame) cmp : Main.getMainframe();
             awtChooser = new FileDialog(frame, title);
             awtChooser.setLocationRelativeTo(frame);
         } else {
@@ -50,7 +50,7 @@ public class FileChooser {
             swingChooser = new JFileChooser() {
                 public void approveSelection() {
                     if (mode == SAVE) {
-                        File file = swingChooser.getSelectedFile();
+                        var file = swingChooser.getSelectedFile();
                         if (file.exists()) {
 
                             switch (JOptionPane.showOptionDialog(swingChooser, Message.get("Overwrite") + " : \n" + file.getPath(), swingChooser.getDialogTitle(),
@@ -163,7 +163,7 @@ public class FileChooser {
     }
 
     public void setDirectory(String dirname) {
-        File file = new File(dirname);
+        var file = new File(dirname);
         if (isNative) {
             awtChooser.setDirectory(file.getPath());
         } else {
@@ -172,7 +172,7 @@ public class FileChooser {
     }
 
     public void setFile(String filename) {
-        File file = new File(filename);
+        var file = new File(filename);
         if (isNative) {
             awtChooser.setFile(file.getName());
         } else {

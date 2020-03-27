@@ -41,8 +41,8 @@ public class XFileFilter extends javax.swing.filechooser.FileFilter implements j
             return acceptDir;
         }
 
-        String ext = getSuffix(file.getName());
-        for (String e : exts) {
+        var ext = getSuffix(file.getName());
+        for (var e : exts) {
             if (e.equalsIgnoreCase(ext)) {
                 return true;
             }

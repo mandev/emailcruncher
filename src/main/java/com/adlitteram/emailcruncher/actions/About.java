@@ -4,8 +4,6 @@ import com.adlitteram.emailcruncher.Cruncher;
 import com.adlitteram.emailcruncher.gui.AboutDialog;
 import java.awt.Component;
 import java.awt.Frame;
-import java.awt.Window;
-
 import java.awt.event.ActionEvent;
 import javax.swing.SwingUtilities;
 

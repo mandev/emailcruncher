@@ -3,7 +3,6 @@ package com.adlitteram.emailcruncher.gui.widgets;
 import com.adlitteram.emailcruncher.Main;
 import com.adlitteram.emailcruncher.Message;
 import com.adlitteram.emailcruncher.utils.Plateform;
-
 import java.awt.Component;
 import java.awt.FileDialog;
 import java.awt.Frame;
@@ -30,7 +29,7 @@ public class DirChooser {
     }
 
     public DirChooser(Component cmp, String dirname, String title) {
-        Frame frame = (cmp instanceof Frame) ? (Frame) cmp : Main.getMainframe();
+        var frame = (cmp instanceof Frame) ? (Frame) cmp : Main.getMainframe();
         isNative = Plateform.isMacOSX();
 
         if (isNative) {
@@ -49,7 +48,7 @@ public class DirChooser {
         awtChooser.setVisible(true);
         System.setProperty("apple.awt.fileDialogForDirectories", "false");
 
-        String filename = awtChooser.getFile();
+        var filename = awtChooser.getFile();
         if (filename != null) {
             selectedDir = new File(awtChooser.getDirectory(), filename);
             return APPROVE_OPTION;

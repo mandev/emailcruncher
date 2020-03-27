@@ -6,7 +6,6 @@ import com.adlitteram.emailcruncher.gui.widgets.DirChooser;
 import com.adlitteram.emailcruncher.gui.widgets.FileChooser;
 import com.adlitteram.emailcruncher.gui.widgets.MultilineLabel;
 import com.adlitteram.emailcruncher.log.Log;
-
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
@@ -58,7 +57,7 @@ public class GuiUtils {
     // DIRECTORIES_ONLY / FILES_AND_DIRECTORIES / FILES_ONLY
     public static JButton createBrowseButton(Component parent, JTextField textField, javax.swing.filechooser.FileFilter filter, String mode) {
 
-        JButton browseButton = new JButton(OPEN_ICON);
+        var browseButton = new JButton(OPEN_ICON);
         browseButton.putClientProperty("BrowseTextField", textField);
         browseButton.putClientProperty("BrowseParent", parent);
         browseButton.putClientProperty("BrowseFilter", filter);
@@ -66,14 +65,14 @@ public class GuiUtils {
 
         browseButton.setMargin(new Insets(0, 5, 0, 5));
         browseButton.addActionListener((ActionEvent e) -> {
-            JButton button = (JButton) e.getSource();
-            JTextField textField1 = (JTextField) button.getClientProperty("BrowseTextField");
-            FileChooser fc = (FileChooser) button.getClientProperty("BrowseFileChooser");
+            var button = (JButton) e.getSource();
+            var textField1 = (JTextField) button.getClientProperty("BrowseTextField");
+            var fc = (FileChooser) button.getClientProperty("BrowseFileChooser");
             if (fc == null) {
-                Component parent1 = (Component) button.getClientProperty("Parent");
+                var parent1 = (Component) button.getClientProperty("Parent");
                 fc = new FileChooser(parent1, Message.get("Select"));
                 fc.setFile(textField1.getText());
-                javax.swing.filechooser.FileFilter filter1 = (javax.swing.filechooser.FileFilter) button.getClientProperty("BrowseFilter");
+                var filter1 = (javax.swing.filechooser.FileFilter) button.getClientProperty("BrowseFilter");
                 if (filter1 != null) {
                     fc.addFileFilter(filter1);
                 }
@@ -81,7 +80,7 @@ public class GuiUtils {
                 // fc.setFileSelectionMode(mode) ;
                 button.putClientProperty("BrowseFileChooser", fc);
             }
-            int status = ("save".equals(button.getClientProperty("BrowseMode"))) ? fc.showSaveDialog() : fc.showOpenDialog();
+            var status = ("save".equals(button.getClientProperty("BrowseMode"))) ? fc.showSaveDialog() : fc.showOpenDialog();
             if (status == FileChooser.APPROVE_OPTION) {
                 textField1.setText(fc.getSelectedFile().getPath());
                 textField1.postActionEvent();
@@ -92,17 +91,16 @@ public class GuiUtils {
 
     public static JButton createDirButton(Component parent, JTextField textField) {
 
-        Frame frame = (parent instanceof Frame) ? (Frame) parent : (Frame) SwingUtilities.getAncestorOfClass(Frame.class, parent);
-
-        JButton browseButton = new JButton(OPEN_ICON);
+        var frame = (parent instanceof Frame) ? (Frame) parent : (Frame) SwingUtilities.getAncestorOfClass(Frame.class, parent);
+        var browseButton = new JButton(OPEN_ICON);
         browseButton.putClientProperty("BrowseTextField", textField);
         browseButton.putClientProperty("BrowseParent", frame);
 
         browseButton.setMargin(new Insets(0, 5, 0, 5));
         browseButton.addActionListener((ActionEvent e) -> {
-            JButton button = (JButton) e.getSource();
-            JTextField textField1 = (JTextField) button.getClientProperty("BrowseTextField");
-            DirChooser fc = (DirChooser) button.getClientProperty("BrowseFileChooser");
+            var button = (JButton) e.getSource();
+            var textField1 = (JTextField) button.getClientProperty("BrowseTextField");
+            var fc = (DirChooser) button.getClientProperty("BrowseFileChooser");
             if (fc == null) {
                 fc = new DirChooser((Frame) button.getClientProperty("BrowseParent"), textField1.getText());
                 button.putClientProperty("BrowseFileChooser", fc);
@@ -116,7 +114,7 @@ public class GuiUtils {
     }
 
     static public JPanel concat(JComponent cp1, JComponent cp2) {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        var panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         panel.add(cp1);
         panel.add(Box.createHorizontalStrut(5));
         panel.add(cp2);
@@ -124,7 +122,7 @@ public class GuiUtils {
     }
 
     static public JPanel addLabel(String str, JComponent cp) {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        var panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         panel.add(new JLabel(str));
         panel.add(Box.createHorizontalStrut(5));
         panel.add(cp);
@@ -132,7 +130,7 @@ public class GuiUtils {
     }
 
     static public JPanel addLabel(JComponent cp, String str) {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        var panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         panel.add(cp);
         panel.add(Box.createHorizontalStrut(5));
         panel.add(new JLabel(str));
@@ -142,7 +140,7 @@ public class GuiUtils {
     // Load Icon from Resource File
     public static ImageIcon loadIcon(String fileName) {
         try {
-            URL url = Main.class.getResource(ICON_DIR + fileName);
+            var url = Main.class.getResource(ICON_DIR + fileName);
             if (url == null) {
                 Log.getLogger().info("Not valid icon URL (url=null) - " + fileName);
                 return null;
@@ -157,7 +155,7 @@ public class GuiUtils {
     // Load Image from Resource File
     public static Image loadImage(String fileName) {
         try {
-            URL url = Main.class.getResource(fileName);
+            var url = Main.class.getResource(fileName);
             if (url == null) {
                 Log.getLogger().info("Not valid image URL (url=null) - " + fileName);
                 return null;
@@ -193,7 +191,7 @@ public class GuiUtils {
     }
 
     public static boolean showYesNoOptionDialog(Component parent, String title, String text, int width) {
-        MultilineLabel label = new MultilineLabel(text);
+        var label = new MultilineLabel(text);
         label.setMaxWidth(width);
         Object[] options = {Message.get("Ok"), Message.get("Cancel")};
         return (JOptionPane.showOptionDialog(parent, label, title, JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0])
@@ -201,8 +199,8 @@ public class GuiUtils {
     }
 
     public static void deepEnabled(Container container, boolean b) {
-        Component[] children = container.getComponents();
-        for (Component child : children) {
+        var children = container.getComponents();
+        for (var child : children) {
             if (child instanceof Container) {
                 deepEnabled((Container) child, b);
             }

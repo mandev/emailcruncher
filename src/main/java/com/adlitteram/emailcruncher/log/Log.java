@@ -26,8 +26,8 @@ public class Log {
     }
 
     public static void resetHandlers() {
-        Handler[] handlers = LOGGER.getHandlers();
-        for (Handler handler : handlers) {
+        var handlers = LOGGER.getHandlers();
+        for (var handler : handlers) {
             if (handler instanceof LogAreaHandler) {
                 ((LogAreaHandler) handler).reset();
             }
@@ -35,8 +35,8 @@ public class Log {
     }
 
     public static void printHandlers() {
-        Handler[] handlers = LOGGER.getHandlers();
-        for (Handler handler : handlers) {
+        var handlers = LOGGER.getHandlers();
+        for (var handler : handlers) {
             System.err.println("handler : " + handler.getClass().getName());
         }
     }

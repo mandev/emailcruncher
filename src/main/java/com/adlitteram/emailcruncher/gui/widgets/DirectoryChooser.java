@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -49,9 +48,9 @@ public class DirectoryChooser extends JTree implements TreeSelectionListener, Mo
     }
 
     public File getSelectedDirectory() {
-        DirNode node = (DirNode) getLastSelectedPathComponent();
+        var node = (DirNode) getLastSelectedPathComponent();
         if (node != null) {
-            File dir = node.getDir();
+            var dir = node.getDir();
             if (fsv.isFileSystem(dir)) {
                 return dir;
             }
@@ -74,22 +73,21 @@ public class DirectoryChooser extends JTree implements TreeSelectionListener, Mo
     @Override
     public void valueChanged(TreeSelectionEvent ev) {
         File oldDir = null;
-        TreePath oldPath = ev.getOldLeadSelectionPath();
+        var oldPath = ev.getOldLeadSelectionPath();
         if (oldPath != null) {
             oldDir = ((DirNode) oldPath.getLastPathComponent()).getDir();
-
             if (!fsv.isFileSystem(oldDir)) {
                 oldDir = null;
             }
         }
-        File newDir = getSelectedDirectory();
+        var newDir = getSelectedDirectory();
         firePropertyChange("selectedDirectory", oldDir, newDir);
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
         if (e.getClickCount() == 2) {
-            TreePath path = getPathForLocation(e.getX(), e.getY());
+            var path = getPathForLocation(e.getX(), e.getY());
             if ((path != null) && path.equals(getSelectionPath()) && (getSelectedDirectory() != null)) {
 
                 fireActionPerformed("dirSelected", e);
@@ -118,16 +116,16 @@ public class DirectoryChooser extends JTree implements TreeSelectionListener, Mo
             return null;
         }
 
-        DirNode root = (DirNode) getModel().getRoot();
+        var root = (DirNode) getModel().getRoot();
         if (root.getDir().equals(dir)) {
             return new TreePath(root);
         }
 
-        TreePath parentPath = mkPath(fsv.getParentDirectory(dir));
-        DirNode parentNode = (DirNode) parentPath.getLastPathComponent();
-        Enumeration enumeration = parentNode.children();
+        var parentPath = mkPath(fsv.getParentDirectory(dir));
+        var parentNode = (DirNode) parentPath.getLastPathComponent();
+        var enumeration = parentNode.children();
         while (enumeration.hasMoreElements()) {
-            DirNode child = (DirNode) enumeration.nextElement();
+            var child = (DirNode) enumeration.nextElement();
             if (child.getDir().equals(dir)) {
                 return parentPath.pathByAddingChild(child);
             }
@@ -136,9 +134,9 @@ public class DirectoryChooser extends JTree implements TreeSelectionListener, Mo
     }
 
     private void fireActionPerformed(String command, InputEvent evt) {
-        ActionEvent e = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, command, evt.getWhen(), evt.getModifiers());
-        ActionListener[] listeners = getActionListeners();
-        for (int i = listeners.length - 1; i >= 0; i--) {
+        var e = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, command, evt.getWhen(), evt.getModifiers());
+        var listeners = getActionListeners();
+        for (var i = listeners.length - 1; i >= 0; i--) {
             listeners[i].actionPerformed(e);
         }
     }
@@ -146,23 +144,24 @@ public class DirectoryChooser extends JTree implements TreeSelectionListener, Mo
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException ignored) {
+        }
+        catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException ignored) {
         }
 
-        final JDialog dialog = new JDialog((JFrame) null, true);
-        final DirectoryChooser dc = new DirectoryChooser();
-        final JButton okButton = new JButton("OK");
-        final JButton cancelButton = new JButton("Cancel");
+        final var dialog = new JDialog((JFrame) null, true);
+        final var dc = new DirectoryChooser();
+        final var okButton = new JButton("OK");
+        final var cancelButton = new JButton("Cancel");
 
         dialog.getContentPane().add(new JScrollPane(dc), BorderLayout.CENTER);
 
-        JPanel buttonPanel = new JPanel();
+        var buttonPanel = new JPanel();
         buttonPanel.add(okButton);
         buttonPanel.add(cancelButton);
         dialog.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
-        ActionListener actionListener = (ActionEvent e) -> {
-            Object c = e.getSource();
+        ActionListener actionListener = e -> {
+            var c = e.getSource();
             if ((c == okButton) || (c == dc)) {
                 System.out.println("You selected: " + dc.getSelectedDirectory());
             }
@@ -173,7 +172,7 @@ public class DirectoryChooser extends JTree implements TreeSelectionListener, Mo
         okButton.addActionListener(actionListener);
         cancelButton.addActionListener(actionListener);
 
-        dc.addPropertyChangeListener((PropertyChangeEvent ev) -> {
+        dc.addPropertyChangeListener(ev -> {
             if (ev.getPropertyName().equals("selectedDirectory")) {
                 okButton.setEnabled(dc.getSelectedDirectory() != null);
             }
@@ -214,10 +213,10 @@ public class DirectoryChooser extends JTree implements TreeSelectionListener, Mo
 
         private void populateChildren() {
             if (children == null) {
-                File[] files = fsv.getFiles(getDir(), true);
+                var files = fsv.getFiles(getDir(), true);
                 Arrays.sort(files);
 
-                for (File f : files) {
+                for (var f : files) {
                     if (fsv.isTraversable(f)) {
                         insert(new DirNode(f), (children == null) ? 0 : children.size());
                     }
@@ -234,5 +233,6 @@ public class DirectoryChooser extends JTree implements TreeSelectionListener, Mo
         public boolean equals(Object o) {
             return ((o instanceof DirNode) && userObject.equals(((DirNode) o).userObject));
         }
+
     }
 }

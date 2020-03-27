@@ -29,7 +29,7 @@ public class MultilineLabel extends JComponent {
     }
 
     public void setText(String text) {
-        String old = this.text;
+        var old = this.text;
         this.text = text;
         firePropertyChange("text", old, this.text);
     }
@@ -42,7 +42,7 @@ public class MultilineLabel extends JComponent {
         if (maxWidth <= 0) {
             throw new IllegalArgumentException();
         }
-        int old = this.maxWidth;
+        var old = this.maxWidth;
         this.maxWidth = maxWidth;
         firePropertyChange("maxWidth", old, this.maxWidth);
     }
@@ -52,7 +52,7 @@ public class MultilineLabel extends JComponent {
     }
 
     public void setJustified(boolean justify) {
-        boolean old = this.justify;
+        var old = this.justify;
         this.justify = justify;
         firePropertyChange("justified", old, this.justify);
     }
@@ -74,7 +74,7 @@ public class MultilineLabel extends JComponent {
     }
 
     private Dimension paintOrGetSize(Graphics2D g, int width) {
-        Insets insets = getInsets();
+        var insets = getInsets();
         width -= insets.left + insets.right + margin.left + margin.right;
         float w = insets.left + insets.right + margin.left + margin.right;
         float x = insets.left + margin.left;
@@ -83,14 +83,14 @@ public class MultilineLabel extends JComponent {
         if ((width > 0) && (text != null) && (text.length() > 0)) {
 
             float max = 0;
-            String[] strs = text.split("\n");
-            for (String str : strs) {
-                AttributedString as = new AttributedString(str);
+            var strs = text.split("\n");
+            for (var str : strs) {
+                var as = new AttributedString(str);
                 as.addAttribute(TextAttribute.FONT, getFont());
-                AttributedCharacterIterator aci = as.getIterator();
-                LineBreakMeasurer lbm = new LineBreakMeasurer(aci, frc);
+                var aci = as.getIterator();
+                var lbm = new LineBreakMeasurer(aci, frc);
                 while (lbm.getPosition() < aci.getEndIndex()) {
-                    TextLayout textLayout = lbm.nextLayout(width);
+                    var textLayout = lbm.nextLayout(width);
                     if (g != null) {
                         if (isJustified() && (textLayout.getVisibleAdvance() > 0.80 * width)) {
                             textLayout = textLayout.getJustifiedLayout(width);

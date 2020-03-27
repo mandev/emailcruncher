@@ -1,11 +1,11 @@
 package com.adlitteram.emailcruncher.gui;
 
+import com.adlitteram.emailcruncher.ActionController;
 import com.adlitteram.emailcruncher.Cruncher;
 import com.adlitteram.emailcruncher.Main;
 import com.adlitteram.emailcruncher.Message;
-import com.adlitteram.emailcruncher.ActionController;
-import com.adlitteram.emailcruncher.log.LogAreaHandler;
 import com.adlitteram.emailcruncher.log.Log;
+import com.adlitteram.emailcruncher.log.LogAreaHandler;
 import com.adlitteram.emailcruncher.utils.GuiUtils;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -36,7 +36,7 @@ public class MainFrame extends JFrame implements PropertyChangeListener {
     }
 
     public static MainFrame create(Cruncher cruncher, ActionController controller) {
-        MainFrame mainframe = new MainFrame(cruncher, controller);
+        var mainframe = new MainFrame(cruncher, controller);
         mainframe.setIconImage(GuiUtils.loadImage("resources/icons/cruncher.png"));
         mainframe.getRootPane().setDefaultButton(mainframe.goButton);
         mainframe.setVisible(true);
@@ -45,24 +45,25 @@ public class MainFrame extends JFrame implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        String propertyName = evt.getPropertyName();
-        if ("addEmail".equals(propertyName)) {
-            SwingUtilities.invokeLater(() -> {
-                emailListModel.addElement(evt.getNewValue().toString());
-                emailCountLabel.setText(String.valueOf(emailListModel.size()));
-            });
-        }
-        else if ("clearEmails".equals(propertyName)) {
-            SwingUtilities.invokeLater(() -> {
-                emailListModel.clear();
-                emailCountLabel.setText(String.valueOf(emailListModel.size()));
-            });
-        }
-        else if ("status".equals(propertyName)) {
-            SwingUtilities.invokeLater(() -> {
-                updateGuiStatus((Integer) evt.getNewValue()) ;
-                urlCombo.setModel(new DefaultComboBoxModel(cruncher.getUrls()));
-            });
+        var propertyName = evt.getPropertyName();
+        if (null != propertyName) switch (propertyName) {
+            case "addEmail":
+                SwingUtilities.invokeLater(() -> {
+                    emailListModel.addElement(evt.getNewValue().toString());
+                    emailCountLabel.setText(String.valueOf(emailListModel.size()));
+                }); break;
+            case "clearEmails":
+                SwingUtilities.invokeLater(() -> {
+                    emailListModel.clear();
+                    emailCountLabel.setText(String.valueOf(emailListModel.size()));
+                }); break;
+            case "status":
+                SwingUtilities.invokeLater(() -> {
+                    updateGuiStatus((Integer) evt.getNewValue()) ;
+                    urlCombo.setModel(new DefaultComboBoxModel(cruncher.getUrls()));
+                }); break;
+            default:
+                break;
         }
         
         repaint();
@@ -401,10 +402,10 @@ public class MainFrame extends JFrame implements PropertyChangeListener {
            cruncher.setInLinkDepth(Integer.parseInt((String) inDepthCombo.getSelectedItem()));
            cruncher.setOutLinkDepth(Integer.parseInt((String) outDepthCombo.getSelectedItem()));
 
-           String url = (String) urlCombo.getSelectedItem();
+           var url = (String) urlCombo.getSelectedItem();
            cruncher.start(new URL(url));
 
-           DefaultComboBoxModel model = (DefaultComboBoxModel) urlCombo.getModel();
+           var model = (DefaultComboBoxModel) urlCombo.getModel();
            if (model.getIndexOf(url) == -1) {
                model.insertElementAt(url, 0);
            }

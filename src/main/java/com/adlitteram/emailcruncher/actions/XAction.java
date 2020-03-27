@@ -1,7 +1,6 @@
 package com.adlitteram.emailcruncher.actions;
 
 import com.adlitteram.emailcruncher.Message;
-
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import javax.swing.KeyStroke;
@@ -12,12 +11,12 @@ abstract public class XAction extends AbstractAction {
         super(actionName);
 
         // Text (label) & Mnemonic
-        String text = Message.get(actionName.concat(".text"));
+        var text = Message.get(actionName.concat(".text"));
         if (text == null) {
             text = actionName;
         }
 
-        int index = text.indexOf('$');
+        var index = text.indexOf('$');
         if ((index != -1) && ((text.length() - index) > 1)) {
             text = text.substring(0, index).concat(text.substring(++index));
             putValue(MNEMONIC_KEY, (int) (text.charAt(index - 1)));
@@ -25,13 +24,13 @@ abstract public class XAction extends AbstractAction {
         putValue("TEXT", text);
 
         // Label
-        String labelName = Message.get(actionName + ".label");
+        var labelName = Message.get(actionName + ".label");
         if (labelName != null) {
             putValue("LABEL", labelName);
         }
 
         // Tooltip
-        String tipName = Message.get(actionName.concat(".tip"));
+        var tipName = Message.get(actionName.concat(".tip"));
         if (tipName != null) {
             putValue(SHORT_DESCRIPTION, tipName);
         }

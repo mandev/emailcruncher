@@ -6,7 +6,6 @@ import com.adlitteram.emailcruncher.Message;
 import com.adlitteram.emailcruncher.gui.widgets.FileChooser;
 import com.adlitteram.emailcruncher.utils.GuiUtils;
 import com.adlitteram.emailcruncher.utils.XFileFilter;
-
 import java.awt.event.ActionEvent;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -16,9 +15,6 @@ import java.io.OutputStreamWriter;
 import java.util.List;
 import java.util.prefs.Preferences;
 import org.apache.poi.hssf.usermodel.HSSFRichTextString;
-
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 public class ExportEmails extends XAction {
@@ -44,7 +40,7 @@ public class ExportEmails extends XAction {
 
         if (fc.showSaveDialog() == FileChooser.APPROVE_OPTION) {
             prefs.put(EXPORT_DIR, fc.getSelectedFile().getParent());
-            String filename = fc.getSelectedFile().getPath();
+            var filename = fc.getSelectedFile().getPath();
             try {
                 if ("xls".equalsIgnoreCase(getSuffix(filename))) {
                     exportToXls(filename);
@@ -59,7 +55,7 @@ public class ExportEmails extends XAction {
 
     // Return String after dot
     public static String getSuffix(String str) {
-        int i = str.lastIndexOf('.');
+        var i = str.lastIndexOf('.');
         if ((i > 0) && (i < (str.length() - 1))) {
             return str.substring(i + 1);
         }

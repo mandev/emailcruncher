@@ -60,18 +60,18 @@ public class EmailSyntaxValidator {
             return 0;
         }
         email = email.trim().toLowerCase();
-        int dotPlace = email.lastIndexOf('.');
+        var dotPlace = email.lastIndexOf('.');
         if (0 < dotPlace && dotPlace < email.length() - 1) {
             /* have at least x.y */
-            String tld = email.substring(dotPlace + 1);
+            var tld = email.substring(dotPlace + 1);
             if (badTLDs.contains(tld)) {
                 /* deliberate invalid address */
                 return 0;
             }
             // make sure none of fragments start or end in _ or -
-            String[] fragments = splitter.split(email);
-            boolean clean = true;
-            for (String fragment : fragments) {
+            var fragments = splitter.split(email);
+            var clean = true;
+            for (var fragment : fragments) {
                 if (fragment.startsWith("_")
                         || fragment.endsWith("_")
                         || fragment.startsWith("-")
@@ -81,7 +81,7 @@ public class EmailSyntaxValidator {
                 }
             } // end for
             if (clean) {
-                Matcher m9 = p9.matcher(email);
+                var m9 = p9.matcher(email);
                 if (m9.matches()) {
                     if (officialTLDs.contains(tld)) {
                         return 9;
@@ -97,7 +97,7 @@ public class EmailSyntaxValidator {
                     }
                 }
                 // allow dots in name
-                Matcher m5 = p5.matcher(email);
+                var m5 = p5.matcher(email);
                 if (m5.matches()) {
                     if (officialTLDs.contains(tld)) {
                         return 5;
@@ -114,14 +114,14 @@ public class EmailSyntaxValidator {
                 }
 
                 // IP
-                Matcher m4 = p4.matcher(email);
+                var m4 = p4.matcher(email);
                 if (m4.matches()) {
                     return 4;
                     /* can't tell TLD */
                 }
 
                 // allow even lead/trail dots in name, except at start of domain
-                Matcher m3 = p3.matcher(email);
+                var m3 = p3.matcher(email);
                 if (m3.matches()) {
                     if (officialTLDs.contains(tld)) {
                         return 3;
@@ -174,7 +174,7 @@ public class EmailSyntaxValidator {
      * @return HashSet you can use to test if a string is in the set.
      */
     private static HashSet hmaker(String[] list) {
-        HashSet map = new HashSet(Math.max((int) (list.length / .75f) + 1,
+        var map = new HashSet(Math.max((int) (list.length / .75f) + 1,
                 16));
         map.addAll(Arrays.asList(list));
         return map;

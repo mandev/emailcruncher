@@ -1,7 +1,10 @@
 package com.adlitteram.emailcruncher;
 
-import com.adlitteram.emailcruncher.actions.*;
-
+import com.adlitteram.emailcruncher.actions.About;
+import com.adlitteram.emailcruncher.actions.ClearEmails;
+import com.adlitteram.emailcruncher.actions.ExportEmails;
+import com.adlitteram.emailcruncher.actions.Settings;
+import com.adlitteram.emailcruncher.actions.XAction;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;

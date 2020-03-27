@@ -210,11 +210,11 @@ public class SettingsDialog extends JDialog {
 
    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
        try {
-           int threads = Integer.parseInt(threadsField.getText());
-           int timeout = Integer.parseInt(timeoutField.getText());
-           boolean useProxy = useProxyCheck.isSelected();
-           String host = proxyHostField.getText();
-           int port = Integer.parseInt(proxyPortField.getText());
+           var threads = Integer.parseInt(threadsField.getText());
+           var timeout = Integer.parseInt(timeoutField.getText());
+           var useProxy = useProxyCheck.isSelected();
+           var host = proxyHostField.getText();
+           var port = Integer.parseInt(proxyPortField.getText());
 
            cruncher.setThreadMax(threads);
            cruncher.setTimeOut(timeout);
@@ -229,7 +229,7 @@ public class SettingsDialog extends JDialog {
    }//GEN-LAST:event_okButtonActionPerformed
 
    private void useProxyCheckStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_useProxyCheckStateChanged
-       boolean b = useProxyCheck.isSelected();
+        var b = useProxyCheck.isSelected();
        proxyAddressLabel.setEnabled(b);
        proxyHostField.setEnabled(b);
        proxyPortLabel.setEnabled(b);

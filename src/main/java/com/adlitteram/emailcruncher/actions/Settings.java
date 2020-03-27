@@ -2,9 +2,7 @@ package com.adlitteram.emailcruncher.actions;
 
 import com.adlitteram.emailcruncher.Cruncher;
 import com.adlitteram.emailcruncher.gui.SettingsDialog;
-
 import java.awt.Component;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingUtilities;
 

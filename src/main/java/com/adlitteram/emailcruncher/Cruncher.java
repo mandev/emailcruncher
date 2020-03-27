@@ -2,7 +2,6 @@ package com.adlitteram.emailcruncher;
 
 import com.adlitteram.emailcruncher.log.Log;
 import com.adlitteram.emailcruncher.utils.LimitedList;
-
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.net.InetSocketAddress;
@@ -99,7 +98,6 @@ public class Cruncher {
         prefs.putBoolean(USE_PROXY, useProxy);
         prefs.put(PROXY_HOST, proxyHost);
         prefs.putInt(PROXY_PORT, proxyPort);
-
         return prefs;
     }
 
