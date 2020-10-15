@@ -24,21 +24,18 @@ public class LogAreaHandler extends Handler {
     }
 
     public synchronized void reset() {
-        SwingUtilities.invokeLater(() -> {
-            try {
-                document.remove(0, document.getLength());
-            } catch (BadLocationException ignored) {
-            }
-        });
+        try {
+            document.remove(0, document.getLength());
+        }
+        catch (BadLocationException ex) {
+        }
     }
 
     @Override
-    public void publish(final LogRecord record) {
+    public synchronized void publish(final LogRecord record) {
         if (isLoggable(record)) {
-            SwingUtilities.invokeLater(() -> {
-                logArea.append(FMT.format(record.getMillis()) + " - " + record.getMessage() + "\n");
-                logArea.setCaretPosition(logArea.getDocument().getLength());
-            });
+            logArea.append(FMT.format(record.getMillis()) + " - " + record.getMessage() + "\n");
+            logArea.setCaretPosition(logArea.getDocument().getLength());
         }
     }
 
@@ -54,12 +51,18 @@ public class LogAreaHandler extends Handler {
 
         @Override
         public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
-            super.insertString(offs, str, a);
-            var tooMany = getLength() - 32000;
-            if (tooMany > 0) {
-                remove(0, tooMany);
+            var too = str.length() - 16000;
+            if (too > 0) {
+                str = str.substring(too);
+                remove(0, getLength());
             }
+            else {
+                var tom = getLength() + str.length() - 16000;
+                if (tom > 0) {
+                    remove(0, tom);
+                }
+            }
+            super.insertString(getLength(), str, a);
         }
     }
-
 }

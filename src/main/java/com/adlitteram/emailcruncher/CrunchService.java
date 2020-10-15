@@ -1,11 +1,12 @@
 package com.adlitteram.emailcruncher;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
+import okhttp3.ConnectionPool;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import org.apache.commons.validator.routines.EmailValidator;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
 
 public class CrunchService {
 
@@ -13,9 +14,17 @@ public class CrunchService {
     private static final Pattern EMAIL_PATTERN = Pattern.compile("([a-z0-9._-]+@[a-z0-9.-]+\\.[a-z]{2,8})");
 
     private final Cruncher cruncher;
+    private final OkHttpClient client;
 
     public CrunchService(Cruncher cruncher) {
         this.cruncher = cruncher;
+
+        this.client = new OkHttpClient.Builder()
+                .readTimeout(10000, TimeUnit.MILLISECONDS)
+                .retryOnConnectionFailure(false)
+                .connectTimeout(10000, TimeUnit.MILLISECONDS)
+                .connectionPool(new ConnectionPool(20, 1L, TimeUnit.MINUTES))
+                .build();
     }
 
     public void scan(ExtURL url) {
@@ -28,13 +37,14 @@ public class CrunchService {
 
     protected String getContent(ExtURL url) {
 
-        try (var httpclient = HttpClients.createDefault()) {
-            var httpGet = new HttpGet(url.getUri());
-            try (var response = httpclient.execute(httpGet)) {
-                var contentType = response.getFirstHeader("content-type");
-                if (contentType != null && contentType.getValue().contains("text/")) {
-                    var entity = response.getEntity();
-                    return entity == null ? null : EntityUtils.toString(entity);
+        var request = new Request.Builder().url(url.getUrl()).build();
+
+        try ( var response = client.newCall(request).execute()) {
+            var contentType = response.header("content-type");
+            if (contentType != null && contentType.contains("text/")) {
+                var body = response.body();
+                if (body != null) {
+                    return body.string();
                 }
             }
         }
