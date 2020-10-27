@@ -48,6 +48,7 @@ public class FileChooser {
         } else {
             parent = (cmp != null) ? cmp : Main.getMainframe();
             swingChooser = new JFileChooser() {
+                @Override
                 public void approveSelection() {
                     if (mode == SAVE) {
                         var file = swingChooser.getSelectedFile();

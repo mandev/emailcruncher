@@ -1,17 +1,14 @@
 package com.adlitteram.emailcruncher;
 
+import com.adlitteram.emailcruncher.utils.EmailExtractor;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import org.apache.commons.validator.routines.EmailValidator;
 
 public class CrunchService {
-
-    private static final EmailValidator EMAIL_VALIDATOR = EmailValidator.getInstance();
-    private static final Pattern EMAIL_PATTERN = Pattern.compile("([a-z0-9._-]+@[a-z0-9.-]+\\.[a-z]{2,8})");
 
     private final Cruncher cruncher;
     private final OkHttpClient client;
@@ -23,7 +20,7 @@ public class CrunchService {
                 .readTimeout(10000, TimeUnit.MILLISECONDS)
                 .retryOnConnectionFailure(false)
                 .connectTimeout(10000, TimeUnit.MILLISECONDS)
-                .connectionPool(new ConnectionPool(20, 1L, TimeUnit.MINUTES))
+                .connectionPool(new ConnectionPool(64, 1L, TimeUnit.MINUTES))
                 .build();
     }
 
@@ -55,19 +52,14 @@ public class CrunchService {
     }
 
     protected int searchEmail(String content) {
+        var filter = cruncher.getEmailFilterPattern();
         var count = 0;
-
-        if (content.contains("@")) {
-            var m = EMAIL_PATTERN.matcher(content.toLowerCase());
-            while (m.find()) {
-                final var email = m.group().trim();
-                if (EMAIL_VALIDATOR.isValid(email)) {
-                    var filter = cruncher.getEmailFilterPattern();
-                    if (filter == null || !filter.matcher(email).matches()) {
-                        count++;
-                        cruncher.addEmail(email);
-                    }
-                }
+        
+        ArrayList<String> emails = EmailExtractor.extracts(content) ;
+        for(String email : emails) {
+            if (filter == null || !filter.matcher(email).matches()) {
+                count++;
+                cruncher.addEmail(email);
             }
         }
         return count;

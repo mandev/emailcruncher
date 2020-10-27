@@ -5,7 +5,6 @@ import com.adlitteram.emailcruncher.Message;
 import com.adlitteram.emailcruncher.gui.widgets.DirChooser;
 import com.adlitteram.emailcruncher.gui.widgets.FileChooser;
 import com.adlitteram.emailcruncher.gui.widgets.MultilineLabel;
-import com.adlitteram.emailcruncher.log.Log;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
@@ -15,8 +14,6 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.net.URL;
-import java.util.logging.Level;
 import javax.swing.Box;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -29,8 +26,12 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GuiUtils {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger("GuiUtils");
 
     public static final String INFO = Message.get("Information");
     public static final String ERROR = Message.get("Error");
@@ -42,7 +43,8 @@ public class GuiUtils {
         try {
             System.setProperty("swing.boldMetal", "false");
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException ignored) {
+        }
+        catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException ignored) {
         }
     }
 
@@ -142,12 +144,13 @@ public class GuiUtils {
         try {
             var url = Main.class.getResource(ICON_DIR + fileName);
             if (url == null) {
-                Log.getLogger().info("Not valid icon URL (url=null) - " + fileName);
+                LOGGER.info("Not valid icon URL (url=null) - {0}", fileName);
                 return null;
             }
             return new ImageIcon(url);
-        } catch (Exception e) {
-            Log.getLogger().log(Level.WARNING, "", e);
+        }
+        catch (Exception e) {
+            LOGGER.warn("", e);
             return null;
         }
     }
@@ -157,12 +160,13 @@ public class GuiUtils {
         try {
             var url = Main.class.getResource(fileName);
             if (url == null) {
-                Log.getLogger().info("Not valid image URL (url=null) - " + fileName);
+                LOGGER.info("Not valid image URL (url=null) - " + fileName);
                 return null;
             }
             return Toolkit.getDefaultToolkit().getImage(url);
-        } catch (Exception e) {
-            Log.getLogger().log(Level.WARNING, "", e);
+        }
+        catch (Exception e) {
+            LOGGER.warn("", e);
             return null;
         }
     }
@@ -184,7 +188,8 @@ public class GuiUtils {
         if (cmpt != null) {
             if (on) {
                 cmpt.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            } else {
+            }
+            else {
                 cmpt.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             }
         }

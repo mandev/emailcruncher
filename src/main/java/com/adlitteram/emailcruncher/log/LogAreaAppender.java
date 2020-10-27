@@ -1,23 +1,21 @@
 package com.adlitteram.emailcruncher.log;
 
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.AppenderBase;
 import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 import org.apache.commons.lang3.time.FastDateFormat;
 
-public class LogAreaHandler extends Handler {
+public class LogAreaAppender extends AppenderBase<ILoggingEvent> {
 
     private final FastDateFormat FMT = FastDateFormat.getDateTimeInstance(FastDateFormat.SHORT, FastDateFormat.MEDIUM);
-
     private final JTextArea logArea;
     private final Document document;
 
-    public LogAreaHandler(JTextArea logArea) {
+    public LogAreaAppender(JTextArea logArea) {
         this.logArea = logArea;
         this.document = new LogDocument();
         logArea.setDocument(document);
@@ -32,34 +30,24 @@ public class LogAreaHandler extends Handler {
     }
 
     @Override
-    public synchronized void publish(final LogRecord record) {
-        if (isLoggable(record)) {
-            logArea.append(FMT.format(record.getMillis()) + " - " + record.getMessage() + "\n");
-            logArea.setCaretPosition(logArea.getDocument().getLength());
-        }
-    }
-
-    @Override
-    public void close() {
-    }
-
-    @Override
-    public void flush() {
+    protected void append(ILoggingEvent event) {
+        logArea.append(FMT.format(event.getTimeStamp()) + " - " + event.getMessage() + "\n");
+        logArea.setCaretPosition(logArea.getDocument().getLength());
     }
 
     private class LogDocument extends PlainDocument {
 
         @Override
         public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
-            var too = str.length() - 16000;
-            if (too > 0) {
-                str = str.substring(too);
+            var tooMany = str.length() - 16000;
+            if (tooMany > 0) {
+                str = str.substring(tooMany);
                 remove(0, getLength());
             }
             else {
-                var tom = getLength() + str.length() - 16000;
-                if (tom > 0) {
-                    remove(0, tom);
+                tooMany += getLength() ;
+                if (tooMany > 0) {
+                    remove(0, tooMany);
                 }
             }
             super.insertString(getLength(), str, a);

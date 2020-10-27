@@ -16,7 +16,6 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.WindowConstants;
 
 public class DirectoryDialog extends JDialog {
 
@@ -29,6 +28,7 @@ public class DirectoryDialog extends JDialog {
     private JButton okButton;
 
     private final ActionListener approveListener = new ActionListener() {
+        @Override
         public void actionPerformed(ActionEvent e) {
             dispose();
             if (dc.getSelectedDirectory() != null) {

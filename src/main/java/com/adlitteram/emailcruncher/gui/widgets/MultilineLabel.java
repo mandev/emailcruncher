@@ -7,8 +7,6 @@ import java.awt.Insets;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineBreakMeasurer;
 import java.awt.font.TextAttribute;
-import java.awt.font.TextLayout;
-import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
 import javax.swing.JComponent;
 

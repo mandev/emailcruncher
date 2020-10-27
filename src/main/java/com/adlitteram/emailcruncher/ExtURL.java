@@ -1,12 +1,15 @@
 package com.adlitteram.emailcruncher;
 
-import com.adlitteram.emailcruncher.log.Log;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ExtURL {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger("ExtURL");
 
     private final URL url;
     private final URL initUrl;
@@ -25,14 +28,6 @@ public class ExtURL {
 
     }
 
-    private URL duplicate(URL url) {
-        try {
-            return new URL(url.toString());
-        } catch (MalformedURLException ex) {
-        }
-        return null;
-    }
-
     public URL getUrl() {
         return url;
     }
@@ -41,7 +36,7 @@ public class ExtURL {
         try {
             return url.toURI();
         } catch (URISyntaxException ex) {
-            Log.info(ex.toString());
+            LOGGER.warn("", ex);
         }
         return null;
     }

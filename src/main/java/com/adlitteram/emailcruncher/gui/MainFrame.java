@@ -4,8 +4,8 @@ import com.adlitteram.emailcruncher.ActionController;
 import com.adlitteram.emailcruncher.Cruncher;
 import com.adlitteram.emailcruncher.Main;
 import com.adlitteram.emailcruncher.Message;
-import com.adlitteram.emailcruncher.log.Log;
-import com.adlitteram.emailcruncher.log.LogAreaHandler;
+import com.adlitteram.emailcruncher.log.LogManager;
+import com.adlitteram.emailcruncher.log.LogAreaAppender;
 import com.adlitteram.emailcruncher.utils.GuiUtils;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -31,12 +31,13 @@ public class MainFrame extends JFrame implements PropertyChangeListener {
 
         stopButton.setEnabled(false);
         urlCombo.requestFocusInWindow();
-        cruncher.addPropertyChangeListener(this);
-        Log.addHandler(new LogAreaHandler(logArea));
+        LogManager.addAppender(new LogAreaAppender(logArea));
     }
 
     public static MainFrame create(Cruncher cruncher, ActionController controller) {
         var mainframe = new MainFrame(cruncher, controller);
+        cruncher.addPropertyChangeListener(mainframe);
+
         mainframe.setIconImage(GuiUtils.loadImage("resources/icons/cruncher.png"));
         mainframe.getRootPane().setDefaultButton(mainframe.goButton);
         mainframe.setVisible(true);
@@ -71,7 +72,7 @@ public class MainFrame extends JFrame implements PropertyChangeListener {
 
     private void updateGuiStatus(int status) {
         if (status == Cruncher.RUN) {
-            Log.resetHandlers();
+            LogManager.resetAppenders();
             goButton.setEnabled(false);
             stopButton.setEnabled(true);
             getRootPane().setDefaultButton(stopButton);

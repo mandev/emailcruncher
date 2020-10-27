@@ -1,6 +1,5 @@
 package com.adlitteram.emailcruncher;
 
-import com.adlitteram.emailcruncher.log.Log;
 import com.adlitteram.emailcruncher.utils.LimitedList;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -18,8 +17,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.prefs.Preferences;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Cruncher {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger("Cruncher");
 
     private static final String URLS = "urls";
     private static final String URL_FILTER = "url_filter";
@@ -103,13 +106,13 @@ public class Cruncher {
 
     public void processUrl(ExtURL extUrl) {
         if (urlFound.add(extUrl.toString())) {
-            Log.info("processUrl: " + extUrl.toString());
+            LOGGER.info("Url: " + extUrl.toString());
             executor.execute(() -> cruncherService.scan(extUrl));
         }
     }
 
     public void start(URL url) {
-        Log.info("start: " + url.toString());
+        LOGGER.info("Start: " + url.toString());
         setStatus(RUN);
         urls.addFirst(url.toString());
         urlFound = Collections.synchronizedSet(new HashSet<>(100000));
@@ -126,18 +129,18 @@ public class Cruncher {
         try {
             // Wait to let threadpool finish
             executor.shutdownNow();
-            executor.awaitTermination(10, TimeUnit.SECONDS);
+            executor.awaitTermination(30, TimeUnit.SECONDS);
         }
         catch (InterruptedException ex) {
         }
 
-        Log.info("stop");
-        Log.info("Exe Queue Size: " + executor.getQueue().size());
-        Log.info("Exe LargestPoolSize: " + executor.getLargestPoolSize());
-        Log.info("Exe CompletedTaskCount: " + executor.getCompletedTaskCount());
-        Log.info("Exe TaskCount: " + executor.getTaskCount());
-        Log.info("URL Found List: " + urlFound.size());
-        Log.info("Extracted emails: " + emailFound.size());
+        LOGGER.info("stop");
+        LOGGER.info("Exe Queue Size: " + executor.getQueue().size());
+        LOGGER.info("Exe LargestPoolSize: " + executor.getLargestPoolSize());
+        LOGGER.info("Exe CompletedTaskCount: " + executor.getCompletedTaskCount());
+        LOGGER.info("Exe TaskCount: " + executor.getTaskCount());
+        LOGGER.info("URL Found List: " + urlFound.size());
+        LOGGER.info("Extracted emails: " + emailFound.size());
 
         urlFound.clear();
         executor.purge();

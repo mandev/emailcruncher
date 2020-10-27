@@ -1,7 +1,7 @@
 package com.adlitteram.emailcruncher.actions;
 
 import com.adlitteram.emailcruncher.Cruncher;
-import com.adlitteram.emailcruncher.log.Log;
+import com.adlitteram.emailcruncher.log.LogManager;
 import java.awt.event.ActionEvent;
 
 public class ClearEmails extends XAction {
@@ -16,6 +16,6 @@ public class ClearEmails extends XAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         cruncher.clearEmails();
-        Log.resetHandlers();
+        LogManager.resetAppenders();
     }
 }

@@ -9,6 +9,7 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -228,10 +229,16 @@ public class DirectoryChooser extends JTree implements TreeSelectionListener, Mo
         public String toString() {
             return fsv.getSystemDisplayName(getDir());
         }
-
+        
         @Override
         public boolean equals(Object o) {
             return ((o instanceof DirNode) && userObject.equals(((DirNode) o).userObject));
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            return hash;
         }
 
     }
