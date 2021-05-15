@@ -17,7 +17,7 @@ public class CruncherModel {
     private int searchLimit = 0;
     private int inLinkDepth = 3;
     private int outLinkDepth = 3;
-    private int timeOut = 120;
+    private int timeOut = 20;
     private int threadMax = 8;
     private boolean useProxy = false;
     private String proxyHost = "proxy";
