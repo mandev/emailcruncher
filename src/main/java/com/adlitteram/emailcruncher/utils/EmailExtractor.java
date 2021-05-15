@@ -34,7 +34,7 @@ public class EmailExtractor {
         ArrayList<String> list = new ArrayList<>();
         State state = State.SEARCH;
 
-        StringBuffer email = null;
+        StringBuilder email = null;
         int i = 0;
 
         while (i < text.length()) {
@@ -49,7 +49,6 @@ public class EmailExtractor {
                     break;
 
                 case USERNAME:
-                    email = new StringBuffer();
                     int j = i - 1;
                     int min = Math.max(0, i - 64);
                     while (j >= min && USERNAME.get(text.charAt(j))) {
@@ -62,7 +61,15 @@ public class EmailExtractor {
                         j++;
                     }
 
+                    // That fix a common problem: '>' is not escaped 
+                    if ( (b == 'u' || b == 'U') 
+                            && text.charAt(j + 1) == '0' && text.charAt(j + 2) == '0'
+                            && text.charAt(j + 3) == '3' && text.charAt(j + 4) == 'E') {
+                        j += 5;
+                    }
+
                     if (j < i) {
+                        email = new StringBuilder();
                         email.append(text, j, i).append('@');
                         state = State.DOMAIN;
                     }
