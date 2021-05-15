@@ -12,6 +12,10 @@ public class LimitedList<E> extends LinkedList<E> {
         limit = 16;
     }
 
+    public LimitedList() {
+        limit = 16;
+    }
+
     public LimitedList(int limit) {
         this.limit = limit;
     }

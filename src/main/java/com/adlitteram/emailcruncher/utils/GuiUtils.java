@@ -26,12 +26,10 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class GuiUtils {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger("GuiUtils");
 
     public static final String INFO = Message.get("Information");
     public static final String ERROR = Message.get("Error");
@@ -144,13 +142,13 @@ public class GuiUtils {
         try {
             var url = Main.class.getResource(ICON_DIR + fileName);
             if (url == null) {
-                LOGGER.info("Not valid icon URL (url=null) - {0}", fileName);
+                log.info("Not valid icon URL (url=null) - {0}", fileName);
                 return null;
             }
             return new ImageIcon(url);
         }
         catch (Exception e) {
-            LOGGER.warn("", e);
+            log.warn("", e);
             return null;
         }
     }
@@ -160,13 +158,13 @@ public class GuiUtils {
         try {
             var url = Main.class.getResource(fileName);
             if (url == null) {
-                LOGGER.info("Not valid image URL (url=null) - " + fileName);
+                log.info("Not valid image URL (url=null) - " + fileName);
                 return null;
             }
             return Toolkit.getDefaultToolkit().getImage(url);
         }
         catch (Exception e) {
-            LOGGER.warn("", e);
+            log.warn("", e);
             return null;
         }
     }

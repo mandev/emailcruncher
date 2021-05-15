@@ -56,12 +56,12 @@ public class EmailExtractor {
                         j--;
                     }
                     j++;
-                    
-                    char b = text.charAt(j) ;
+
+                    char b = text.charAt(j);
                     if (b == '.' || b == '-') {
                         j++;
                     }
-                    
+
                     if (j < i) {
                         email.append(text, j, i).append('@');
                         state = State.DOMAIN;
@@ -80,7 +80,7 @@ public class EmailExtractor {
                     }
 
                     int n = k - 1;
-                    char d = text.charAt(n) ;
+                    char d = text.charAt(n);
 
                     if (d == '.' || d == '-') {
                         k--;

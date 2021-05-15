@@ -1,6 +1,7 @@
 package com.adlitteram.emailcruncher.actions;
 
 import com.adlitteram.emailcruncher.Cruncher;
+import com.adlitteram.emailcruncher.CruncherModel;
 import com.adlitteram.emailcruncher.Main;
 import com.adlitteram.emailcruncher.Message;
 import com.adlitteram.emailcruncher.gui.widgets.FileChooser;
@@ -13,41 +14,40 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.List;
-import java.util.prefs.Preferences;
 import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 public class ExportEmails extends XAction {
 
-    private static final String EXPORT_DIR = "export_dir";
     private final Cruncher cruncher;
 
     public ExportEmails(Cruncher cruncher) {
         super("ExportEmails");
         this.cruncher = cruncher;
-
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        var prefs = Preferences.userNodeForPackage(ExportEmails.class);
+        CruncherModel cruncherModel = cruncher.getCruncherModel();
 
         var fc = new FileChooser(Main.getMainframe(), Message.get("ExportTitle"));
-        fc.setDirectory(prefs.get(EXPORT_DIR, System.getProperty("user.home")));
+        fc.setDirectory(cruncherModel.getExportDir());
         fc.setFile("");
         fc.addFileFilter(XFileFilter.XLS);
         fc.addFileFilter(XFileFilter.TXT);
 
         if (fc.showSaveDialog() == FileChooser.APPROVE_OPTION) {
-            prefs.put(EXPORT_DIR, fc.getSelectedFile().getParent());
+            cruncherModel.setExportDir(fc.getSelectedFile().getParent());
             var filename = fc.getSelectedFile().getPath();
             try {
                 if ("xls".equalsIgnoreCase(getSuffix(filename))) {
                     exportToXls(filename);
-                } else {
+                }
+                else {
                     exportToTxt(filename);
                 }
-            } catch (IOException ex) {
+            }
+            catch (IOException ex) {
                 GuiUtils.showError(Message.get("ExportError") + ex.getMessage());
             }
         }
@@ -89,4 +89,5 @@ public class ExportEmails extends XAction {
             }
         }
     }
+
 }

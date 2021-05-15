@@ -33,7 +33,8 @@ public class DirectoryDialog extends JDialog {
             dispose();
             if (dc.getSelectedDirectory() != null) {
                 status = APPROVE_OPTION;
-            } else {
+            }
+            else {
                 status = CANCEL_OPTION;
             }
         }
@@ -56,7 +57,8 @@ public class DirectoryDialog extends JDialog {
         var dir = new File(dirname);
         if (!dir.isDirectory()) {
             dc = new DirectoryChooser();
-        } else {
+        }
+        else {
             dc = new DirectoryChooser(dir);
         }
 

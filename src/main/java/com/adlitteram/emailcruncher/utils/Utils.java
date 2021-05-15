@@ -6,17 +6,16 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class Utils {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger("Utils");
-    
     public static void sleep(long s) {
         try {
             Thread.sleep(s);
-        } catch (InterruptedException ignored) {
+        }
+        catch (InterruptedException ignored) {
         }
     }
 
@@ -24,7 +23,8 @@ public class Utils {
         if (in != null) {
             try {
                 in.close();
-            } catch (IOException ignored) {
+            }
+            catch (IOException ignored) {
             }
         }
     }
@@ -33,7 +33,8 @@ public class Utils {
         if (in != null) {
             try {
                 in.close();
-            } catch (IOException ignored) {
+            }
+            catch (IOException ignored) {
             }
         }
     }
@@ -41,8 +42,9 @@ public class Utils {
     public static void execBrowser(String url) {
         try {
             Desktop.getDesktop().browse(new URI(url));
-        } catch (IOException | URISyntaxException ex) {
-            LOGGER.warn("Unable to exec browser: " + url, ex);
+        }
+        catch (IOException | URISyntaxException ex) {
+            log.warn("Unable to exec browser: " + url, ex);
         }
     }
 }

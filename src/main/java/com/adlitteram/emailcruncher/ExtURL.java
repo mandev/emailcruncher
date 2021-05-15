@@ -4,12 +4,10 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class ExtURL {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger("ExtURL");
 
     private final URL url;
     private final URL initUrl;
@@ -35,8 +33,9 @@ public class ExtURL {
     public URI getUri() {
         try {
             return url.toURI();
-        } catch (URISyntaxException ex) {
-            LOGGER.warn("", ex);
+        }
+        catch (URISyntaxException ex) {
+            log.warn("", ex);
         }
         return null;
     }
@@ -56,22 +55,26 @@ public class ExtURL {
                     || "https".equalsIgnoreCase(linkUrl.getProtocol())) {
                 if (initUrl.getHost().equalsIgnoreCase(linkUrl.getHost())) {
                     return new ExtURL(linkUrl, initUrl, inLinkCount + 1, outLinkCount);
-                } else {
+                }
+                else {
                     return new ExtURL(linkUrl, initUrl, inLinkCount, outLinkCount + 1);
                 }
             }
-        } catch (MalformedURLException ignored) {
+        }
+        catch (MalformedURLException ignored) {
         }
 
         try {
             var linkUrl = new URL(url, l);
             if (initUrl.getHost().equalsIgnoreCase(linkUrl.getHost())) {
                 return new ExtURL(linkUrl, initUrl, inLinkCount + 1, outLinkCount);
-            } else {
+            }
+            else {
                 return new ExtURL(linkUrl, initUrl, inLinkCount, outLinkCount + 1);
             }
 
-        } catch (MalformedURLException e) {
+        }
+        catch (MalformedURLException e) {
             return null;
         }
     }

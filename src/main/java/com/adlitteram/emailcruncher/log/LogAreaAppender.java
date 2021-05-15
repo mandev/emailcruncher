@@ -45,7 +45,7 @@ public class LogAreaAppender extends AppenderBase<ILoggingEvent> {
                 remove(0, getLength());
             }
             else {
-                tooMany += getLength() ;
+                tooMany += getLength();
                 if (tooMany > 0) {
                     remove(0, tooMany);
                 }

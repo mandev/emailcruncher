@@ -229,14 +229,17 @@
         <Component class="javax.swing.JTextField" name="skipUrlField">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="cruncher.getUrlFilter()" type="code"/>
+              <Connection code="cruncher.getCruncherModel().getUrlFilter()" type="code"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="skipUrlFieldActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="skipPageField">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="cruncher.getPageFilter()" type="code"/>
+              <Connection code="cruncher.getCruncherModel().getPageFilter()" type="code"/>
             </Property>
           </Properties>
         </Component>
@@ -250,7 +253,7 @@
         <Component class="javax.swing.JTextField" name="skipEmailField">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="cruncher.getEmailFilter()" type="code"/>
+              <Connection code="cruncher.getCruncherModel().getEmailFilter()" type="code"/>
             </Property>
           </Properties>
         </Component>
@@ -270,7 +273,7 @@
               </StringArray>
             </Property>
             <Property name="selectedIndex" type="int" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="cruncher.getSearchLimit()" type="code"/>
+              <Connection code="cruncher.getCruncherModel().getSearchLimit()" type="code"/>
             </Property>
           </Properties>
         </Component>
@@ -371,7 +374,7 @@
       <Properties>
         <Property name="editable" type="boolean" value="true"/>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="new DefaultComboBoxModel(cruncher.getUrls())" type="code"/>
+          <Connection code="new DefaultComboBoxModel(cruncher.getCruncherModel().getUrls().toArray(new String[0]))" type="code"/>
         </Property>
       </Properties>
       <Events>
