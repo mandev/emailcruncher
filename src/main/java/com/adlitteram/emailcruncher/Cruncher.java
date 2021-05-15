@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
+import java.net.ProxySelector;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,20 +35,22 @@ public class Cruncher {
     private ThreadPoolExecutor executor;
     private Pattern urlFilterPattern;
     private Pattern emailFilterPattern;
+    private long startTime ;
 
     private Status status = Status.STOP;
 
     private Cruncher(CruncherModel cruncherModel) {
         this.cruncherModel = cruncherModel;
 
-        this.foundEmails = Collections.synchronizedSet(new HashSet<>(1000));
+        this.foundEmails = Collections.synchronizedSet(new HashSet<>(10000));
 
         // TODO Configure proxy   
+        int poolSize = Math.max(64, cruncherModel.getThreadMax()/5) ;
         this.httpClient = new OkHttpClient.Builder()
-                .readTimeout(10000, TimeUnit.MILLISECONDS)
+                .readTimeout(cruncherModel.getTimeOut()*1000, TimeUnit.MILLISECONDS)
                 .retryOnConnectionFailure(false)
-                .connectTimeout(10000, TimeUnit.MILLISECONDS)
-                .connectionPool(new ConnectionPool(64, 1L, TimeUnit.MINUTES))
+                .connectTimeout(cruncherModel.getTimeOut()*1000, TimeUnit.MILLISECONDS)
+                .connectionPool(new ConnectionPool(poolSize, 1L, TimeUnit.MINUTES))
                 .build();
     }
 
@@ -95,6 +98,7 @@ public class Cruncher {
 
     public void start(URL url) {
         log.info("Start: " + url.toString());
+        startTime = System.currentTimeMillis() ;
         setStatus(Status.RUN);
         cruncherModel.getUrls().addFirst(url.toString());
 
@@ -119,14 +123,17 @@ public class Cruncher {
         catch (InterruptedException ex) {
         }
 
+        long stopTime = System.currentTimeMillis() ;
+                
         log.info("Stop");
-        log.info("Queue Size: " + executor.getQueue().size());
         log.info("Largest pool size: " + executor.getLargestPoolSize());
         log.info("Completed tasks: " + executor.getCompletedTaskCount());
-        log.info("Current tasks: " + executor.getTaskCount());
+        log.info("Total tasks: " + executor.getTaskCount());
         log.info("URLs found: " + foundUrls.size());
         log.info("Emails found: " + foundEmails.size());
-
+        log.info("Wall Time: " + Math.round((stopTime-startTime)/1000) + " s");
+        log.info("Completed Tasks/Sec: " + Math.round(executor.getCompletedTaskCount()*1000/(stopTime-startTime)));
+        
         foundUrls.clear();
         executor.purge();
     }
@@ -147,8 +154,14 @@ public class Cruncher {
     }
 
     private void processUrl(ExtURL extUrl) {
-        if (foundUrls.add(extUrl.toString())) {
-            log.info(extUrl.toString());
+        if (foundUrls.add(extUrl.toString())) { 
+            log.info("Queue Size: " + executor.getQueue().size() + 
+                    " - Core Threads: " + executor.getCorePoolSize() +
+                    " - Active Taks: " + executor.getActiveCount() + 
+                    " - Completed Tasks: " + executor.getCompletedTaskCount() +
+                    " - Total Tasks: " + executor.getTaskCount());
+            
+//            log.info(extUrl.toString());
             executor.execute(() -> {
                 var content = getContent(extUrl);
                 if (content != null) {
@@ -174,7 +187,7 @@ public class Cruncher {
         }
         catch (IOException ex) {
             if (!executor.isShutdown()) {
-                log.warn("Failed to call url", ex);
+                log.warn("Failed to call " + url.toString(), ex);
             }
         }
         return null;
@@ -252,6 +265,7 @@ public class Cruncher {
                 if ((cruncherModel.getInLinkDepth() > 0) && (urlLink.getInLinkCount() > cruncherModel.getInLinkDepth())) {
                     continue;
                 }
+                
                 if ((cruncherModel.getOutLinkDepth() > 0) && (urlLink.getOutLinkCount() > cruncherModel.getOutLinkDepth())) {
                     continue;
                 }
