@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.ResponseBody;
 
 @Slf4j
 public class Cruncher {
@@ -35,7 +36,7 @@ public class Cruncher {
     private ThreadPoolExecutor executor;
     private Pattern urlFilterPattern;
     private Pattern emailFilterPattern;
-    private long startTime ;
+    private long startTime;
 
     private Cruncher(CruncherModel cruncherModel) {
         this.cruncherModel = cruncherModel;
@@ -50,7 +51,7 @@ public class Cruncher {
             cruncherModel = str == null ? new CruncherModel() : new ObjectMapper().readValue(str, CruncherModel.class);
         }
         catch (JsonProcessingException ex) {
-            log.info("Unable to find or read Cruncher preferences", ex);
+            log.warn("Failed to find or read Cruncher preferences", ex);
             cruncherModel = new CruncherModel();
         }
 
@@ -85,7 +86,7 @@ public class Cruncher {
 
     public void start(URL url) {
         log.info("Start: " + url.toString());
-        startTime = System.currentTimeMillis() ;
+        startTime = System.currentTimeMillis();
         setStatus(Status.RUN);
         cruncherModel.getUrls().addFirst(url.toString());
 
@@ -96,12 +97,12 @@ public class Cruncher {
         emailFilterPattern = (emailFilter.length() > 0) ? Pattern.compile(emailFilter) : null;
 
         // TODO Configure proxy   
-        int poolSize = Math.max(64, cruncherModel.getThreadMax()/5) ;
+        int poolSize = Math.max(64, cruncherModel.getThreadMax() / 5);
         httpClient = new OkHttpClient.Builder()
-                .readTimeout(cruncherModel.getTimeOut()*1000, TimeUnit.MILLISECONDS)
-                .retryOnConnectionFailure(false)
-                .connectTimeout(cruncherModel.getTimeOut()*1000, TimeUnit.MILLISECONDS)
+                .readTimeout(cruncherModel.getTimeOut(), TimeUnit.SECONDS)
+                .connectTimeout(cruncherModel.getTimeOut(), TimeUnit.SECONDS)
                 .connectionPool(new ConnectionPool(poolSize, 1L, TimeUnit.MINUTES))
+                .retryOnConnectionFailure(true)
                 .build();
 
         foundUrls = Collections.synchronizedSet(new HashSet<>(100000));
@@ -113,22 +114,22 @@ public class Cruncher {
         setStatus(Status.STOP);
         try {
             executor.shutdownNow();
-            executor.awaitTermination(5, TimeUnit.SECONDS);
+            executor.awaitTermination(cruncherModel.getTimeOut(), TimeUnit.SECONDS);
         }
         catch (InterruptedException ex) {
         }
 
-        long stopTime = System.currentTimeMillis() ;
-                
+        long stopTime = System.currentTimeMillis();
+
         log.info("Stop");
         log.info("Largest pool size: " + executor.getLargestPoolSize());
         log.info("Completed tasks: " + executor.getCompletedTaskCount());
         log.info("Total tasks: " + executor.getTaskCount());
         log.info("URLs found: " + foundUrls.size());
         log.info("Emails found: " + foundEmails.size());
-        log.info("Wall Time: " + Math.round((stopTime-startTime)/1000) + " s");
-        log.info("Completed Tasks/Sec: " + Math.round(executor.getCompletedTaskCount()*1000/(stopTime-startTime)));
-        
+        log.info("Wall Time: " + Math.round((stopTime - startTime) / 1000) + " s");
+        log.info("Completed Tasks/Sec: " + Math.round(executor.getCompletedTaskCount() * 1000 / (stopTime - startTime)));
+
         foundUrls.clear();
         executor.purge();
     }
@@ -149,25 +150,20 @@ public class Cruncher {
     }
 
     private void processUrl(ExtURL extUrl) {
-        if (foundUrls.add(extUrl.toString())) { 
-            log.info("Queue Size: " + executor.getQueue().size() + 
-                    " - Core Threads: " + executor.getCorePoolSize() +
-                    " - Active Taks: " + executor.getActiveCount() + 
-                    " - Completed Tasks: " + executor.getCompletedTaskCount() +
-                    " - Total Tasks: " + executor.getTaskCount());
-            
-            executor.execute(() -> {
-                var content = getContent(extUrl);
-                if (content != null) {
-                    searchURL(content, extUrl);
-                    searchEmail(content);
-                }
-            });
+        if (foundUrls.add(extUrl.toString())) {
+            log.info("Queue Size: " + executor.getQueue().size()
+                    + " - Core Threads: " + executor.getCorePoolSize()
+                    + " - Active Taks: " + executor.getActiveCount()
+                    + " - Completed Tasks: " + executor.getCompletedTaskCount()
+                    + " - Total Tasks: " + executor.getTaskCount());
+
+            executor.execute(() -> callUrl(extUrl));
         }
     }
 
-    private String getContent(ExtURL url) {
+    private void callUrl(ExtURL url) {
 
+        String content = null;
         var request = new Request.Builder().url(url.getUrl()).build();
 
         try (var response = httpClient.newCall(request).execute()) {
@@ -175,7 +171,7 @@ public class Cruncher {
             if (contentType != null && contentType.contains("text/")) {
                 var body = response.body();
                 if (body != null) {
-                    return body.string();
+                    content = body.string();
                 }
             }
         }
@@ -183,11 +179,16 @@ public class Cruncher {
             if (!executor.isShutdown()) {
                 log.warn("Failed to call " + url.toString(), ex);
             }
+            return;
         }
-        return null;
+
+        if (content != null) {
+            extractUrls(content, url);
+            extractEmails(content);
+        }
     }
 
-    private int searchURL(String content, ExtURL url) {
+    private int extractUrls(String content, ExtURL url) {
         var count = 0;
 
         if (cruncherModel.getPageFilter().length() > 0) {
@@ -259,7 +260,7 @@ public class Cruncher {
                 if ((cruncherModel.getInLinkDepth() > 0) && (urlLink.getInLinkCount() > cruncherModel.getInLinkDepth())) {
                     continue;
                 }
-                
+
                 if ((cruncherModel.getOutLinkDepth() > 0) && (urlLink.getOutLinkCount() > cruncherModel.getOutLinkDepth())) {
                     continue;
                 }
@@ -271,7 +272,7 @@ public class Cruncher {
         return count;
     }
 
-    private int searchEmail(String content) {
+    private int extractEmails(String content) {
         var count = 0;
 
         ArrayList<String> emails = EmailExtractor.extracts(content);
