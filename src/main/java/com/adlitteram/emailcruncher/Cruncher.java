@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
-import java.net.ProxySelector;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,31 +26,19 @@ import okhttp3.Request;
 public class Cruncher {
 
     private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
-    private final Set<String> foundEmails;
-    private final OkHttpClient httpClient;
+    private final Set<String> foundEmails = Collections.synchronizedSet(new HashSet<>(10000));
     private final CruncherModel cruncherModel;
 
+    private Status status = Status.STOP;
+    private OkHttpClient httpClient;
     private Set<String> foundUrls;
     private ThreadPoolExecutor executor;
     private Pattern urlFilterPattern;
     private Pattern emailFilterPattern;
     private long startTime ;
 
-    private Status status = Status.STOP;
-
     private Cruncher(CruncherModel cruncherModel) {
         this.cruncherModel = cruncherModel;
-
-        this.foundEmails = Collections.synchronizedSet(new HashSet<>(10000));
-
-        // TODO Configure proxy   
-        int poolSize = Math.max(64, cruncherModel.getThreadMax()/5) ;
-        this.httpClient = new OkHttpClient.Builder()
-                .readTimeout(cruncherModel.getTimeOut()*1000, TimeUnit.MILLISECONDS)
-                .retryOnConnectionFailure(false)
-                .connectTimeout(cruncherModel.getTimeOut()*1000, TimeUnit.MILLISECONDS)
-                .connectionPool(new ConnectionPool(poolSize, 1L, TimeUnit.MINUTES))
-                .build();
     }
 
     public static Cruncher create() {
@@ -108,6 +95,15 @@ public class Cruncher {
         String emailFilter = cruncherModel.getEmailFilter();
         emailFilterPattern = (emailFilter.length() > 0) ? Pattern.compile(emailFilter) : null;
 
+        // TODO Configure proxy   
+        int poolSize = Math.max(64, cruncherModel.getThreadMax()/5) ;
+        httpClient = new OkHttpClient.Builder()
+                .readTimeout(cruncherModel.getTimeOut()*1000, TimeUnit.MILLISECONDS)
+                .retryOnConnectionFailure(false)
+                .connectTimeout(cruncherModel.getTimeOut()*1000, TimeUnit.MILLISECONDS)
+                .connectionPool(new ConnectionPool(poolSize, 1L, TimeUnit.MINUTES))
+                .build();
+
         foundUrls = Collections.synchronizedSet(new HashSet<>(100000));
         executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(cruncherModel.getThreadMax());
         processUrl(new ExtURL(url));
@@ -116,7 +112,6 @@ public class Cruncher {
     public void stop() {
         setStatus(Status.STOP);
         try {
-            // Wait to let threads to finish
             executor.shutdownNow();
             executor.awaitTermination(5, TimeUnit.SECONDS);
         }
@@ -161,7 +156,6 @@ public class Cruncher {
                     " - Completed Tasks: " + executor.getCompletedTaskCount() +
                     " - Total Tasks: " + executor.getTaskCount());
             
-//            log.info(extUrl.toString());
             executor.execute(() -> {
                 var content = getContent(extUrl);
                 if (content != null) {
