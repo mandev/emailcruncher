@@ -21,6 +21,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -134,7 +135,7 @@ public class DirectoryChooser extends JTree implements TreeSelectionListener, Mo
     }
 
     private void fireActionPerformed(String command, InputEvent evt) {
-        var e = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, command, evt.getWhen(), evt.getModifiers());
+        var e = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, command, evt.getWhen(), evt.getModifiersEx());
         var listeners = getActionListeners();
         for (var i = listeners.length - 1; i >= 0; i--) {
             listeners[i].actionPerformed(e);
@@ -201,7 +202,7 @@ public class DirectoryChooser extends JTree implements TreeSelectionListener, Mo
         }
 
         @Override
-        public Enumeration children() {
+        public Enumeration<TreeNode> children() {
             populateChildren();
             return super.children();
         }

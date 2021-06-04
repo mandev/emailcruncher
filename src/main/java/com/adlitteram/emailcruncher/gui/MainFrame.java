@@ -66,7 +66,8 @@ public class MainFrame extends JFrame implements PropertyChangeListener {
                 case "status":
                     SwingUtilities.invokeLater(() -> {
                         updateGuiStatus((Status) evt.getNewValue());
-                        urlCombo.setModel(new DefaultComboBoxModel(cruncher.getCruncherModel().getUrls().toArray(new String[0])));
+                        String [] items = cruncher.getCruncherModel().getUrls().toArray(new String[0]) ;
+                        urlCombo.setModel(new DefaultComboBoxModel<>(items));
                     });
                     break;
                 default:
@@ -108,19 +109,19 @@ public class MainFrame extends JFrame implements PropertyChangeListener {
         skipPageLabel = new javax.swing.JLabel();
         skipEmailField = new javax.swing.JTextField();
         skipEmailLabel = new javax.swing.JLabel();
-        limitCombo = new javax.swing.JComboBox();
+        limitCombo = new javax.swing.JComboBox<>();
         limitLabel = new javax.swing.JLabel();
         inDepthLabel = new javax.swing.JLabel();
         outDepthLabel = new javax.swing.JLabel();
-        inDepthCombo = new javax.swing.JComboBox();
-        outDepthCombo = new javax.swing.JComboBox();
+        inDepthCombo = new javax.swing.JComboBox<>();
+        outDepthCombo = new javax.swing.JComboBox<>();
         urlLabel = new javax.swing.JLabel();
         stopButton = new javax.swing.JButton();
         goButton = new javax.swing.JButton();
-        urlCombo = new javax.swing.JComboBox();
+        urlCombo = new javax.swing.JComboBox<>();
         jSplitPane1 = new javax.swing.JSplitPane();
         emailsScrollPane = new javax.swing.JScrollPane();
-        emailsList = new javax.swing.JList();
+        emailsList = new javax.swing.JList<>();
         jPanel1 = new javax.swing.JPanel();
         logScrollPane = new javax.swing.JScrollPane();
         logArea = new javax.swing.JTextArea();
@@ -177,7 +178,7 @@ public class MainFrame extends JFrame implements PropertyChangeListener {
 
         skipEmailLabel.setText(bundle.getString("SkipEmail")); // NOI18N
 
-        limitCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "local links", "all links" }));
+        limitCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "local links", "all links" }));
         limitCombo.setSelectedIndex(cruncher.getCruncherModel().getSearchLimit());
 
         limitLabel.setText(bundle.getString("LimitSearch")); // NOI18N
@@ -187,10 +188,10 @@ public class MainFrame extends JFrame implements PropertyChangeListener {
         outDepthLabel.setText(bundle.getString("OtherSiteLinkDepth")); // NOI18N
 
         inDepthCombo.setEditable(true);
-        inDepthCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" }));
+        inDepthCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" }));
 
         outDepthCombo.setEditable(true);
-        outDepthCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" }));
+        outDepthCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" }));
 
         javax.swing.GroupLayout optionPanelLayout = new javax.swing.GroupLayout(optionPanel);
         optionPanel.setLayout(optionPanelLayout);
@@ -266,7 +267,7 @@ public class MainFrame extends JFrame implements PropertyChangeListener {
         });
 
         urlCombo.setEditable(true);
-        urlCombo.setModel(new DefaultComboBoxModel(cruncher.getCruncherModel().getUrls().toArray(new String[0])));
+        urlCombo.setModel(new DefaultComboBoxModel<>(cruncher.getCruncherModel().getUrls().toArray(new String[0])));
         urlCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 urlComboActionPerformed(evt);
@@ -415,7 +416,7 @@ public class MainFrame extends JFrame implements PropertyChangeListener {
            var url = (String) urlCombo.getSelectedItem();
            cruncher.start(new URL(url));
 
-           var model = (DefaultComboBoxModel) urlCombo.getModel();
+           var model = (DefaultComboBoxModel<String>) urlCombo.getModel();
            if (model.getIndexOf(url) == -1) {
                model.insertElementAt(url, 0);
            }
@@ -452,21 +453,21 @@ public class MainFrame extends JFrame implements PropertyChangeListener {
     private javax.swing.JButton clearEmailsButton;
     private javax.swing.JLabel emailCountLabel;
     private javax.swing.JLabel emailLabel;
-    private javax.swing.JList emailsList;
+    private javax.swing.JList<String> emailsList;
     private javax.swing.JScrollPane emailsScrollPane;
     private javax.swing.JButton exportToButton;
     private javax.swing.JButton goButton;
-    private javax.swing.JComboBox inDepthCombo;
+    private javax.swing.JComboBox<String> inDepthCombo;
     private javax.swing.JLabel inDepthLabel;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSplitPane jSplitPane1;
-    private javax.swing.JComboBox limitCombo;
+    private javax.swing.JComboBox<String> limitCombo;
     private javax.swing.JLabel limitLabel;
     private javax.swing.JTextArea logArea;
     private javax.swing.JScrollPane logScrollPane;
     private javax.swing.JLabel logWindowLabel;
     private javax.swing.JPanel optionPanel;
-    private javax.swing.JComboBox outDepthCombo;
+    private javax.swing.JComboBox<String> outDepthCombo;
     private javax.swing.JLabel outDepthLabel;
     private javax.swing.JButton settingsButton;
     private javax.swing.JTextField skipEmailField;
@@ -476,7 +477,7 @@ public class MainFrame extends JFrame implements PropertyChangeListener {
     private javax.swing.JTextField skipUrlField;
     private javax.swing.JLabel skipUrlLabel;
     private javax.swing.JButton stopButton;
-    private javax.swing.JComboBox urlCombo;
+    private javax.swing.JComboBox<String> urlCombo;
     private javax.swing.JLabel urlLabel;
     // End of variables declaration//GEN-END:variables
 

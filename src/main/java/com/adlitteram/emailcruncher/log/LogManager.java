@@ -4,6 +4,7 @@ import ch.qos.logback.core.Appender;
 import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.spi.ILoggingEvent;
 
 public class LogManager {
 
@@ -14,7 +15,7 @@ public class LogManager {
         ROOT_LOGGER.setLevel(Level.ALL);
     }
 
-    public static void addAppender(Appender appender) {
+    public static void addAppender(Appender<ILoggingEvent> appender) {
         ROOT_LOGGER.setAdditive(false);
         ROOT_LOGGER.addAppender(appender);
         appender.start();
